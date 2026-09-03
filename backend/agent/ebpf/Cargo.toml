@@ -1,0 +1,21 @@
+[package]
+name = "threat-analyser-ebpf"
+version = "4.0.0"
+edition = "2021"
+authors = ["Threat Analyser Security Engineering Team"]
+description = "High-performance Linux Kernel eBPF Probes for Un-bypassable System Call Auditing"
+
+[dependencies]
+aya = { version = "0.12", features = ["async_tokio"] }
+aya-bpf = "0.1"
+aya-log = "0.2"
+aya-log-ebpf = "0.1"
+tokio = { version = "1.35", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+reqwest = { version = "0.11", features = ["json"] }
+bytes = "1.5"
+
+[[bin]]
+name = "threat-analyser-ebpf"
+path = "src/main.rs"

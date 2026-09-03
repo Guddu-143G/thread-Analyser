@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-base-950 text-slate-200 font-sans antialiased selection:bg-accent/30 selection:text-accent;
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: theme('colors.base.950'); }
+::-webkit-scrollbar-thumb { background: theme('colors.base.700'); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: theme('colors.base.600'); }
+
+.severity-badge {
+  @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold uppercase tracking-wide;
+}
+.severity-low { @apply bg-severity-low/15 text-severity-low border border-severity-low/30; }
+.severity-medium { @apply bg-severity-medium/15 text-severity-medium border border-severity-medium/30; }
+.severity-high { @apply bg-severity-high/15 text-severity-high border border-severity-high/30; }
+.severity-critical { @apply bg-severity-critical/15 text-severity-critical border border-severity-critical/30; }
+
+.panel {
+  @apply bg-base-900 border border-base-700 rounded-lg;
+}
+
+.btn-primary {
+  @apply bg-accent text-base-950 font-semibold px-4 py-2 rounded-md hover:bg-accent-dim transition-all shadow-sm hover:shadow-[0_0_15px_rgba(0,212,160,0.3)] disabled:opacity-50 disabled:cursor-not-allowed;
+}
+.btn-secondary {
+  @apply bg-base-800 text-slate-200 font-medium px-4 py-2 rounded-md border border-base-600 hover:bg-base-700 hover:border-slate-400 transition-all;
+}
+.input-field {
+  @apply bg-base-800 border border-base-600 rounded-md px-3 py-2 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent w-full transition-colors;
+}
+
+/* Cybernetic Grid & Glow Effects */
+.cyber-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(30, 41, 59, 0.25) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30, 41, 59, 0.25) 1px, transparent 1px);
+}
+
+.cyber-glow {
+  box-shadow: 0 0 50px -10px rgba(0, 212, 160, 0.15);
+}
+
+.cyber-glow-rose {
+  box-shadow: 0 0 50px -10px rgba(239, 68, 68, 0.2);
+}
+
+/* Ticker Marquee Animation */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: 200%;
+  animation: marquee 30s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Laser Scanline Animation */
+@keyframes scanline {
+  0% { transform: translateY(-100%); opacity: 0; }
+  50% { opacity: 0.8; }
+  100% { transform: translateY(1000%); opacity: 0; }
+}
+
+.animate-scanline {
+  animation: scanline 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

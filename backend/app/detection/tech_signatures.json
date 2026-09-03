@@ -1,0 +1,28 @@
+{
+  "signatures": [
+    {
+      "tech_name": "FastAPI",
+      "category": "Web Framework",
+      "process_regex": "uvicorn|fastapi",
+      "arguments_regex": "--host|--port",
+      "default_port": 8000,
+      "confidence": "high"
+    },
+    {
+      "tech_name": "PostgreSQL",
+      "category": "Database Management System",
+      "process_regex": "postgres|pg_ctl",
+      "arguments_regex": "-D|postgres.conf",
+      "default_port": 5432,
+      "confidence": "very_high"
+    },
+    {
+      "tech_name": "Spring Boot",
+      "category": "Enterprise Application Framework",
+      "process_regex": "java",
+      "arguments_regex": "-jar|\\.war|spring\\.profiles\\.active",
+      "default_port": 8080,
+      "confidence": "high"
+    }
+  ]
+}
