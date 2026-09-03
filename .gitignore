@@ -1,6 +1,9 @@
 # Environment and Secrets
 .env
-.env.local
+.env.*
+*.env
+*.env.*
+.neon
 .neon/
 
 # Python artifacts & virtual environments
@@ -12,6 +15,8 @@ venv/
 ENV/
 *.egg-info/
 .pytest_cache/
+celerybeat-schedule*
+*.schedule
 
 # Node & Frontend build
 node_modules/
