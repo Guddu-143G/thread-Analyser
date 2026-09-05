@@ -137,13 +137,20 @@ export default function V17NeonMesh() {
     }
   }
 
-  // Initial load
+  // Initial load & Real-time Live Engine Polling
   useEffect(() => {
     fetchNeonStatus()
     fetchFleetDevices()
     fetchEmailHistory()
     fetchUrlHistory()
     fetchAnomalies()
+    const interval = setInterval(() => {
+      fetchFleetDevices()
+      fetchEmailHistory()
+      fetchUrlHistory()
+      fetchAnomalies()
+    }, 4000)
+    return () => clearInterval(interval)
   }, [])
 
   // Ingest Telemetry Handlers

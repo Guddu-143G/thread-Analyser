@@ -576,3 +576,444 @@ class LiveTerminalStream(Base):
     executed_at = Column(DateTime, default=datetime.utcnow)
 
     session = relationship("LiveResponseSession")
+
+
+# ---------------------------------------------------------
+# Version 21: Hardware-Assisted Mobile Forensics & Passcode Auditing Models
+# ---------------------------------------------------------
+
+class MobileForensicSession(Base):
+    __tablename__ = "mobile_forensic_sessions"
+    session_id = Column(String, primary_key=True, default=gen_uuid)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=False)
+    analyst_id = Column(String, ForeignKey("users.id"), nullable=False)
+    device_name = Column(String(100), nullable=False)
+    device_model = Column(String(50), nullable=False)
+    serial_number = Column(String(100), nullable=False, index=True)
+    udid = Column(String(100), nullable=False)
+    os_name = Column(String(50), nullable=False)
+    os_version = Column(String(30), nullable=False)
+    connection_type = Column(String(20), nullable=False, default="USB") # USB, ADB, LIGHTNING, NETWORK
+    passcode_type = Column(String(20), nullable=False, default="PIN_4") # PATTERN, PIN_4, PIN_6, ALPHANUMERIC
+    max_estimated_entropy = Column(Float, nullable=False, default=0.0)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    completed_at = Column(DateTime, nullable=True)
+    status = Column(String(30), nullable=False, default="RUNNING") # RUNNING, COMPLETED, LOCKED_OUT, TERMINATED
+
+    analyst = relationship("User")
+    attempts = relationship("PasscodeGuessAttempt", back_populates="session", cascade="all, delete-orphan")
+
+
+class PasscodeGuessAttempt(Base):
+    __tablename__ = "passcode_guess_attempts"
+    attempt_id = Column(Integer, primary_key=True, autoincrement=True)
+    session_id = Column(String, ForeignKey("mobile_forensic_sessions.session_id"), nullable=False, index=True)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=False)
+    attempt_index = Column(Integer, nullable=False)
+    passcode_attempt_hash = Column(String(64), nullable=False)
+    pattern_path = Column(JSON, nullable=True) # Grid coordinates [0-8] for Gesture audits
+    is_successful = Column(Boolean, default=False)
+    response_latency_ms = Column(Integer, nullable=False, default=50)
+    response_code = Column(String(30), nullable=False, default="REJECTED") # REJECTED, LOCKED_OUT, SUCCESS, ERROR
+    timestamp = Column(DateTime, default=datetime.utcnow)
+
+    session = relationship("MobileForensicSession", back_populates="attempts")
+
+
+# ---------------------------------------------------------
+# Version 23: Merkle-Chained Neon SQL Temporal Ledger Models
+# ---------------------------------------------------------
+
+class DeviceAuditLedger(Base):
+    __tablename__ = "devices_audit_ledger"
+    ledger_id = Column(String, primary_key=True, default=gen_uuid)
+    device_id = Column(String, nullable=False, index=True)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=False, index=True)
+    hostname = Column(String(255), nullable=False)
+    ip_address = Column(String(45), nullable=False)
+    system_status = Column(String(50), nullable=False, default="active")
+    operation_type = Column(String(10), nullable=False, default="INSERT") # INSERT, UPDATE, DELETE
+    transaction_timestamp = Column(DateTime, default=datetime.utcnow)
+    parent_hash = Column(String(64), nullable=True)
+    record_hash = Column(String(64), nullable=False)
+
+
+# ---------------------------------------------------------
+# Version 24: Cryptographic Merkle-Chained Neon Audit Ledger Models
+# ---------------------------------------------------------
+
+class AuditLedger(Base):
+    __tablename__ = "audit_ledger"
+    sequence_id = Column(Integer, primary_key=True, autoincrement=True)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=False, index=True)
+    device_id = Column(String, nullable=True, index=True)
+    event_timestamp = Column(DateTime, default=datetime.utcnow)
+    action = Column(String(100), nullable=False)
+    actor_email = Column(String(255), nullable=False)
+    ip_address = Column(String(45), nullable=False)
+    mac_address = Column(String(17), nullable=False)
+    payload_hash = Column(String(64), nullable=False)
+    previous_record_hash = Column(String(64), nullable=True)
+    current_ledger_hash = Column(String(64), nullable=False, unique=True, index=True)
+
+
+# ---------------------------------------------------------
+# Version 25: Real-Time MITRE ATT&CK Matrix, MDPS & AI Threat Summary Models
+# ---------------------------------------------------------
+
+class MitreTechniqueMapping(Base):
+    __tablename__ = "mitre_technique_mappings"
+    id = Column(String, primary_key=True, default=gen_uuid)
+    technique_id = Column(String(30), nullable=False, index=True)
+    technique_name = Column(String(255), nullable=False)
+    tactic_id = Column(String(30), nullable=False, index=True)
+    tactic_name = Column(String(100), nullable=False)
+    ocsf_class_id = Column(Integer, nullable=False, default=4001)
+    severity_weight = Column(Float, nullable=False, default=70.0)
+    detection_rule = Column(JSON, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class IngestionMetric(Base):
+    __tablename__ = "ingestion_metrics"
+    id = Column(String, primary_key=True, default=gen_uuid)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=False, index=True)
+    window_start = Column(DateTime, default=datetime.utcnow)
+    window_end = Column(DateTime, default=datetime.utcnow)
+    events_ingested = Column(Integer, default=0)
+    events_dropped = Column(Integer, default=0)
+    eps_rate = Column(Float, default=0.0)
+    avg_latency_ms = Column(Float, default=0.0)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class MitreAlert(Base):
+    __tablename__ = "mitre_alerts"
+    alert_id = Column(String, primary_key=True, default=gen_uuid)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=False, index=True)
+    device_id = Column(String, nullable=True, index=True)
+    source_ip = Column(String(45), nullable=True)
+    destination_ip = Column(String(45), nullable=True)
+    technique_id = Column(String(30), nullable=False, index=True)
+    tactic_id = Column(String(30), nullable=False, index=True)
+    anomaly_score = Column(Float, default=0.0)
+    mitre_weight = Column(Float, default=0.0)
+    asset_criticality = Column(Float, default=0.0)
+    intel_confidence = Column(Float, default=0.0)
+    priority_score = Column(Float, default=0.0)
+    priority_level = Column(String(20), default="LOW") # LOW, MEDIUM, HIGH, CRITICAL
+    payload_summary = Column(Text, nullable=True)
+    raw_event_data = Column(JSON, default=dict)
+    parent_alert_hash = Column(String(64), nullable=True)
+    alert_hash = Column(String(64), nullable=False, index=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    summaries = relationship("AIThreatSummary", back_populates="alert", cascade="all, delete-orphan")
+
+
+class AIThreatSummary(Base):
+    __tablename__ = "ai_threat_summaries"
+    summary_id = Column(String, primary_key=True, default=gen_uuid)
+    alert_id = Column(String, ForeignKey("mitre_alerts.alert_id"), nullable=False, index=True)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=False, index=True)
+    sanitized_input = Column(Text, nullable=False)
+    model_used = Column(String(50), default="gemini-1.5-flash-shielded")
+    executive_summary = Column(Text, nullable=False)
+    threat_actor_attribution = Column(String(100), nullable=True)
+    actionable_remediation = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    alert = relationship("MitreAlert", back_populates="summaries")
+
+
+# ---------------------------------------------------------
+# Version 26: Real-Time Provenance, SOAR & TPM 2.0 Ledger
+# ---------------------------------------------------------
+
+class ProvenanceNode(Base):
+    __tablename__ = "provenance_nodes"
+    id = Column(String, primary_key=True, default=gen_uuid)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=False, index=True)
+    device_id = Column(String, nullable=False, index=True)
+    node_type = Column(String(50), nullable=False) # PROCESS, FILE, SOCKET, DOMAIN, IP_ADDRESS, USER
+    entity_key = Column(String(255), nullable=False, index=True)
+    name = Column(String(255), nullable=False, default="")
+    node_metadata = Column(JSON, default=dict)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    outgoing_edges = relationship("ProvenanceEdge", foreign_keys="ProvenanceEdge.source_node_id", back_populates="source_node", cascade="all, delete-orphan")
+    incoming_edges = relationship("ProvenanceEdge", foreign_keys="ProvenanceEdge.target_node_id", back_populates="target_node", cascade="all, delete-orphan")
+
+
+class ProvenanceEdge(Base):
+    __tablename__ = "provenance_edges"
+    id = Column(String, primary_key=True, default=gen_uuid)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=False, index=True)
+    source_node_id = Column(String, ForeignKey("provenance_nodes.id", ondelete="CASCADE"), nullable=False, index=True)
+    target_node_id = Column(String, ForeignKey("provenance_nodes.id", ondelete="CASCADE"), nullable=False, index=True)
+    relation_type = Column(String(50), nullable=False) # EXECUTED, SPAWNED, READ, WROTE, CONNECTED_TO, RESOLVED
+    edge_weight = Column(Float, nullable=False, default=1.0)
+    edge_hash_sha256 = Column(String(64), nullable=True)
+    metadata_json = Column(JSON, default=dict)
+    timestamp = Column(DateTime, default=datetime.utcnow)
+
+    source_node = relationship("ProvenanceNode", foreign_keys=[source_node_id], back_populates="outgoing_edges")
+    target_node = relationship("ProvenanceNode", foreign_keys=[target_node_id], back_populates="incoming_edges")
+
+
+class SOARPlaybook(Base):
+    __tablename__ = "soar_playbooks"
+    id = Column(String, primary_key=True, default=gen_uuid)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=False, index=True)
+    name = Column(String(255), nullable=False)
+    is_active = Column(Boolean, default=True)
+    playbook_yaml = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    execution_logs = relationship("SOARExecutionLog", back_populates="playbook", cascade="all, delete-orphan")
+
+
+class SOARExecutionLog(Base):
+    __tablename__ = "soar_execution_logs"
+    id = Column(String, primary_key=True, default=gen_uuid)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=False, index=True)
+    playbook_id = Column(String, ForeignKey("soar_playbooks.id", ondelete="CASCADE"), nullable=False, index=True)
+    device_id = Column(String, nullable=False, index=True)
+    status = Column(String(50), nullable=False, default="IN_PROGRESS") # SUCCESS, FAILED, RUNNING, PARTIAL_FAILURE
+    execution_dag_trace = Column(JSON, default=dict)
+    started_at = Column(DateTime, default=datetime.utcnow)
+    completed_at = Column(DateTime, nullable=True)
+
+    playbook = relationship("SOARPlaybook", back_populates="execution_logs")
+
+
+class TPMLedgerSignature(Base):
+    __tablename__ = "tpm_ledger_signatures"
+    id = Column(String, primary_key=True, default=gen_uuid)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=False, index=True)
+    block_start_id = Column(String, nullable=False)
+    block_end_id = Column(String, nullable=False)
+    merkle_root_hash = Column(String(64), nullable=False, index=True)
+    pcr_composite_digest = Column(String(64), nullable=True)
+    tpm_hardware_signature = Column(String(512), nullable=False)
+    attested_at = Column(DateTime, default=datetime.utcnow)
+
+
+# Version 27 Models: ML Anomaly Engine & Multi-Tenant Pipeline Models
+class MLModel(Base):
+    __tablename__ = "ml_models"
+    id = Column(String, primary_key=True, default=gen_uuid)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=False, index=True)
+    algorithm = Column(String(100), default="IsolationForest")
+    version = Column(String(50), default="v27.0")
+    contamination = Column(Float, default=0.05)
+    training_samples_count = Column(Integer, default=0)
+    model_artifact_path = Column(String(512), nullable=True)
+    status = Column(String(50), default="ACTIVE")  # ACTIVE, TRAINING, FAILED, RETIRED
+    metrics = Column(JSON, default=dict)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    runs = relationship("MLModelRun", back_populates="model", cascade="all, delete-orphan")
+    baselines = relationship("MLFeatureBaseline", back_populates="model", cascade="all, delete-orphan")
+
+
+class MLModelRun(Base):
+    __tablename__ = "ml_model_runs"
+    id = Column(String, primary_key=True, default=gen_uuid)
+    model_id = Column(String, ForeignKey("ml_models.id", ondelete="CASCADE"), nullable=False, index=True)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=False, index=True)
+    run_type = Column(String(50), default="RETRAIN")  # RETRAIN, COLD_START, SCHEDULED
+    status = Column(String(50), default="SUCCESS")  # SUCCESS, FAILED, RUNNING
+    samples_used = Column(Integer, default=0)
+    training_duration_sec = Column(Float, default=0.0)
+    loss_or_score = Column(Float, nullable=True)
+    run_log = Column(JSON, default=dict)
+    started_at = Column(DateTime, default=datetime.utcnow)
+    completed_at = Column(DateTime, default=datetime.utcnow)
+
+    model = relationship("MLModel", back_populates="runs")
+
+
+class MLFeatureBaseline(Base):
+    __tablename__ = "ml_feature_baselines"
+    id = Column(String, primary_key=True, default=gen_uuid)
+    model_id = Column(String, ForeignKey("ml_models.id", ondelete="CASCADE"), nullable=False, index=True)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=False, index=True)
+    feature_name = Column(String(100), nullable=False)
+    mean_value = Column(Float, default=0.0)
+    std_value = Column(Float, default=1.0)
+    min_value = Column(Float, default=0.0)
+    max_value = Column(Float, default=1.0)
+    importance_weight = Column(Float, default=0.1)
+    calculated_at = Column(DateTime, default=datetime.utcnow)
+
+    model = relationship("MLModel", back_populates="baselines")
+
+
+# Version 28 Models: Multi-Tenant Federated Learning & Collaborative Mesh
+class FederatedModel(Base):
+    __tablename__ = "federated_models"
+    id = Column(String, primary_key=True, default=gen_uuid)
+    model_name = Column(String(100), nullable=False, default="global_anomaly_forest")
+    version_id = Column(Integer, nullable=False, default=1)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=True, index=True)  # NULL indicates global shared model baseline
+    model_state = Column(String(30), nullable=False, default="ACTIVE")  # ACTIVE, DEPRECATED, COMPROMISED
+    global_parameters_hex = Column(Text, nullable=False)  # Serialized/Hex global parameters
+    total_epochs_trained = Column(Integer, nullable=False, default=0)
+    metrics = Column(JSON, default=dict)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    client_updates = relationship("FederatedClientUpdate", back_populates="model", cascade="all, delete-orphan")
+    runs = relationship("FederationRun", back_populates="model", cascade="all, delete-orphan")
+
+
+class FederatedClientUpdate(Base):
+    __tablename__ = "federated_client_updates"
+    id = Column(String, primary_key=True, default=gen_uuid)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=False, index=True)
+    model_id = Column(String, ForeignKey("federated_models.id", ondelete="CASCADE"), nullable=False, index=True)
+    local_sample_count = Column(Integer, nullable=False, default=0)
+    parameter_weights_hex = Column(Text, nullable=False)
+    checksum_signature = Column(String(64), nullable=False)
+    submitted_at = Column(DateTime, default=datetime.utcnow)
+
+    model = relationship("FederatedModel", back_populates="client_updates")
+
+
+class FederationRun(Base):
+    __tablename__ = "federation_runs"
+    id = Column(String, primary_key=True, default=gen_uuid)
+    global_model_id = Column(String, ForeignKey("federated_models.id", ondelete="CASCADE"), nullable=False, index=True)
+    consolidated_at = Column(DateTime, default=datetime.utcnow)
+    active_client_count = Column(Integer, nullable=False, default=1)
+    aggregated_loss = Column(Float, nullable=False, default=0.0)
+    signature_proof = Column(String(128), nullable=False)
+    run_metadata = Column(JSON, default=dict)
+
+    model = relationship("FederatedModel", back_populates="runs")
+
+
+# =========================================================================
+# Version 29 Models: Sovereign Synthetic Telemetry & Purple-Team Emulation
+# =========================================================================
+
+class SimulationProfile(Base):
+    __tablename__ = "simulation_profiles"
+    id = Column(String, primary_key=True, default=gen_uuid)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=True, index=True)  # NULL indicates global pre-seeded scenario
+    name = Column(String(100), nullable=False)
+    description = Column(Text, nullable=False)
+    threat_actor = Column(String(50), nullable=False)  # e.g., APT29, CozyBear, HermeticWiper
+    is_active = Column(Boolean, nullable=False, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    steps = relationship("SimulationStep", back_populates="profile", cascade="all, delete-orphan", order_by="SimulationStep.step_order")
+    runs = relationship("SimulationRun", back_populates="profile", cascade="all, delete-orphan")
+
+
+class SimulationStep(Base):
+    __tablename__ = "simulation_steps"
+    id = Column(String, primary_key=True, default=gen_uuid)
+    profile_id = Column(String, ForeignKey("simulation_profiles.id", ondelete="CASCADE"), nullable=False, index=True)
+    step_order = Column(Integer, nullable=False)
+    delay_seconds = Column(Integer, nullable=False, default=5)
+    ocsf_class_uid = Column(Integer, nullable=False)  # e.g. 3002 (Auth), 1007 (Process), 4001 (Network), 1001 (File)
+    mock_log_payload = Column(JSON, nullable=False)
+
+    profile = relationship("SimulationProfile", back_populates="steps")
+
+
+class SimulationRun(Base):
+    __tablename__ = "simulation_runs"
+    id = Column(String, primary_key=True, default=gen_uuid)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=False, index=True)
+    profile_id = Column(String, ForeignKey("simulation_profiles.id", ondelete="CASCADE"), nullable=False, index=True)
+    started_at = Column(DateTime, default=datetime.utcnow)
+    completed_at = Column(DateTime, nullable=True)
+    status = Column(String(30), nullable=False, default="RUNNING")  # RUNNING, COMPLETED, FAILED
+    alerts_triggered_count = Column(Integer, nullable=False, default=0)
+    triggered_alert_ids = Column(JSON, default=list)
+    details = Column(JSON, default=dict)
+
+    profile = relationship("SimulationProfile", back_populates="runs")
+
+
+# =========================================================================
+# Version 30 Models: Generative Security Digital Twin (GSDT) & Cyber Range
+# =========================================================================
+
+class TwinNode(Base):
+    __tablename__ = "twin_nodes"
+    id = Column(String, primary_key=True, default=gen_uuid)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=False, index=True)
+    name = Column(String(100), nullable=False)
+    asset_type = Column(String(50), nullable=False)  # WORKSTATION, DOMAIN_CONTROLLER, DATABASE_SERVER, S3_BUCKET, API_GATEWAY
+    hostname_hash = Column(String(64), nullable=False)  # Anonymized using HMAC-SHA-256
+    ip_address_hash = Column(String(64), nullable=False)
+    mac_address_hash = Column(String(64), nullable=False)
+    os_version = Column(String(100), nullable=False, default="Linux 6.5.0")
+    criticality_id = Column(Integer, nullable=False, default=3)  # Asset severity rating (1-5)
+    status = Column(String(30), nullable=False, default="SAFE")  # SAFE, COMPROMISED, CONTAINED, INVESTIGATING
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    source_relationships = relationship("TwinRelationship", foreign_keys="TwinRelationship.source_node_id", back_populates="source_node", cascade="all, delete-orphan")
+    target_relationships = relationship("TwinRelationship", foreign_keys="TwinRelationship.target_node_id", back_populates="target_node", cascade="all, delete-orphan")
+
+
+class TwinRelationship(Base):
+    __tablename__ = "twin_relationships"
+    id = Column(String, primary_key=True, default=gen_uuid)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=False, index=True)
+    source_node_id = Column(String, ForeignKey("twin_nodes.id", ondelete="CASCADE"), nullable=False, index=True)
+    target_node_id = Column(String, ForeignKey("twin_nodes.id", ondelete="CASCADE"), nullable=False, index=True)
+    relationship_type = Column(String(50), nullable=False)  # NETWORK_ROUTE, AD_MEMBER, AUTHENTICATED_TO, TRUST_BOUNDARY
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    source_node = relationship("TwinNode", foreign_keys=[source_node_id], back_populates="source_relationships")
+    target_node = relationship("TwinNode", foreign_keys=[target_node_id], back_populates="target_relationships")
+
+
+class GAANSession(Base):
+    __tablename__ = "gaan_sessions"
+    id = Column(String, primary_key=True, default=gen_uuid)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=False, index=True)
+    scenario_name = Column(String(100), nullable=False)
+    status = Column(String(30), nullable=False, default="RUNNING")  # RUNNING, COMPLETED, FAILED
+    red_agent_model = Column(String(50), nullable=False, default="local-mistral-7b-v1")
+    blue_agent_model = Column(String(50), nullable=False, default="local-mistral-7b-v1")
+    red_score = Column(Integer, nullable=False, default=0)
+    blue_score = Column(Integer, nullable=False, default=0)
+    started_at = Column(DateTime, default=datetime.utcnow)
+    ended_at = Column(DateTime, nullable=True)
+
+    steps = relationship("SimulationExecutionLedger", back_populates="session", cascade="all, delete-orphan", order_by="SimulationExecutionLedger.step_index")
+
+
+class SimulationExecutionLedger(Base):
+    __tablename__ = "simulation_execution_ledger"
+    id = Column(String, primary_key=True, default=gen_uuid)
+    org_id = Column(String, ForeignKey("organizations.id"), nullable=False, index=True)
+    session_id = Column(String, ForeignKey("gaan_sessions.id", ondelete="CASCADE"), nullable=False, index=True)
+    step_index = Column(Integer, nullable=False)
+    mitre_tactic_id = Column(String(20), nullable=False)  # e.g., TA0002
+    mitre_technique_id = Column(String(20), nullable=False)  # e.g., T1059
+    agent_action_description = Column(Text, nullable=False)
+    simulated_ocsf_payload = Column(JSON, nullable=False)  # Raw OCSF v1.2 log payload
+    is_detected = Column(Boolean, nullable=False, default=False)
+    remediation_triggered = Column(Text, nullable=True)  # SOAR task execution traces
+    previous_step_hash = Column(String(64), nullable=False)  # Merkle link
+    current_ledger_hash = Column(String(64), nullable=False)  # SHA-256 (id + previous_step_hash + simulated_ocsf_payload)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    session = relationship("GAANSession", back_populates="steps")
+
+
+
+
+
+
+
+
+

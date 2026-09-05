@@ -1,0 +1,72 @@
+# =============================================================================
+# Production-Grade Multi-Tenant GitOps Deployment Blueprint (Version 29)
+# KEDA ScaledObject for Celery Workers consuming Redis Stream 'logs:raw_stream'
+# =============================================================================
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: celery-stream-worker-scaler
+  namespace: threat-analyser-prod
+  labels:
+    app.kubernetes.io/name: threat-analyser
+    app.kubernetes.io/component: celery-worker
+    app.kubernetes.io/version: "29.0.0"
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: threat-analyser-worker
+  minReplicaCount: 2
+  maxReplicaCount: 50
+  cooldownPeriod: 300
+  pollingInterval: 15
+  triggers:
+    - type: redis-streams
+      metadata:
+        address: redis-cluster.threat-analyser-prod.svc.cluster.local:6379
+        stream: logs:raw_stream
+        consumerGroup: celery_ingest_group
+        pendingEntriesCount: "10000"
+      authenticationRef:
+        name: keda-redis-auth
+---
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: keda-redis-auth
+  namespace: threat-analyser-prod
+spec:
+  secretTargetRef:
+    - parameter: password
+      name: threat-analyser-secrets
+      key: REDIS_PASSWORD
+---
+# =============================================================================
+# ArgoCD GitOps Application Specification
+# =============================================================================
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: threat-analyser-sovereign-matrix
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/threat-analyser/threat-analyser-gitops.git'
+    targetRevision: HEAD
+    path: helm/threat-analyser
+    helm:
+      valueFiles:
+        - values-production.yaml
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: threat-analyser-prod
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true

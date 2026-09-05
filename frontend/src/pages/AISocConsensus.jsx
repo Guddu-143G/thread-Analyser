@@ -72,7 +72,7 @@ export default function AISocConsensus() {
 
   useEffect(() => {
     loadData()
-    const interval = setInterval(loadData, 10000)
+    const interval = setInterval(loadData, 4000)
     return () => clearInterval(interval)
   }, [])
 

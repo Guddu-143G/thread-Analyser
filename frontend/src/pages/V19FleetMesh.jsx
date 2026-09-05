@@ -53,6 +53,12 @@ export default function V19FleetMesh() {
     fetchFleetMap()
     fetchQueryRuns()
     fetchAuditLogs()
+    const interval = setInterval(() => {
+      fetchFleetMap()
+      fetchQueryRuns()
+      fetchAuditLogs()
+    }, 4000)
+    return () => clearInterval(interval)
   }, [])
 
   // Auto-select first device for processes and files when mapDevices loads

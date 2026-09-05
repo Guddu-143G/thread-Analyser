@@ -15,8 +15,9 @@ export default function Login() {
     e.preventDefault()
     setError('')
     setLoading(true)
+    const cleanEmail = email.trim().toLowerCase()
     try {
-      await login(email, password)
+      await login(cleanEmail, password)
       navigate('/')
     } catch (err) {
       setError(err.response?.data?.detail || 'Login failed')

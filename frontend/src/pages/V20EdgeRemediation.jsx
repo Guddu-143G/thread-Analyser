@@ -51,6 +51,11 @@ export default function V20EdgeRemediation() {
     fetchMeshStatus()
     fetchDevices()
     fetchTerminalSessions()
+    const interval = setInterval(() => {
+      fetchDevices()
+      fetchTerminalSessions()
+    }, 4000)
+    return () => clearInterval(interval)
   }, [])
 
   useEffect(() => {

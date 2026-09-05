@@ -9,13 +9,19 @@ export default function Devices() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  const load = useCallback(() => {
-    setLoading(true)
-    client.get('/devices').then(({ data }) => setDevices(data)).finally(() => setLoading(false))
+  const load = useCallback((isQuiet = false) => {
+    if (!isQuiet) setLoading(true)
+    client.get('/devices').then(({ data }) => setDevices(data)).finally(() => {
+      if (!isQuiet) setLoading(false)
+    })
   }, [])
 
   useEffect(() => {
     load()
+    const interval = setInterval(() => {
+      load(true)
+    }, 5000)
+    return () => clearInterval(interval)
   }, [load])
 
   const createDevice = async (e) => {

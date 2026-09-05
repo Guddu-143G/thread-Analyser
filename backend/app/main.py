@@ -10,10 +10,15 @@ from app.api.routes import (
     enclave, archive, deception, simulation,
     fhe, honeynet, hunting, sbom as sbom_route, containment,
     pqc, gnn, twin, forensics, exchange, inventory, bluetooth, tpm, chaos,
-    consensus, ws, sovereign, v15_defense, v16_defense, v17_neon_mesh, v18_live_response, v19_fleet_control, v20_edge_mesh
+    consensus, ws, sovereign, v15_defense, v16_defense, v17_neon_mesh, v18_live_response, v19_fleet_control, v20_edge_mesh, v21_mobile_forensics,
+    v23_spatial_ledger, v24_baseband_ledger, v25_cognitive_matrix, v26_provenance_soar,
+    v27_ml_anomaly, v28_federated_ml, v29_simulation_stg, v30_cyber_range
 )
+from app.api import ws_provenance_stream, ws_ml, ws_federation, ws_simulation, ws_cyber_range
 
-app = FastAPI(title=settings.APP_NAME, version="20.0.0")
+app = FastAPI(title=settings.APP_NAME, version="30.0.0")
+
+
 
 origins = ["*"] if settings.CORS_ORIGINS == "*" else settings.CORS_ORIGINS.split(",")
 app.add_middleware(
@@ -62,6 +67,23 @@ app.include_router(v17_neon_mesh.router, prefix="/api")
 app.include_router(v18_live_response.router, prefix="/api")
 app.include_router(v19_fleet_control.router, prefix="/api")
 app.include_router(v20_edge_mesh.router, prefix="/api")
+app.include_router(v21_mobile_forensics.router, prefix="/api")
+app.include_router(v23_spatial_ledger.router, prefix="/api")
+app.include_router(v24_baseband_ledger.router, prefix="/api")
+app.include_router(v24_baseband_ledger.realtime_router, prefix="/api")
+app.include_router(v25_cognitive_matrix.router, prefix="/api")
+app.include_router(v25_cognitive_matrix.v1_stream_router, prefix="/api")
+app.include_router(v26_provenance_soar.router, prefix="/api")
+app.include_router(ws_provenance_stream.router)
+app.include_router(v27_ml_anomaly.router, prefix="/api/v27", tags=["V27 ML Anomaly Engine"])
+app.include_router(ws_ml.router)
+app.include_router(v28_federated_ml.router, prefix="/api/v28", tags=["V28 Federated Learning Mesh"])
+app.include_router(ws_federation.router)
+app.include_router(v29_simulation_stg.router, prefix="/api/v29", tags=["V29 Sovereign STG & Purple-Team"])
+app.include_router(ws_simulation.router)
+app.include_router(v30_cyber_range.router, prefix="/api/v30", tags=["V30 Cyber Range & GSDT"])
+app.include_router(v30_cyber_range.router, prefix="/api/v1/range", tags=["V30 Cyber Range V1 Alias"])
+app.include_router(ws_cyber_range.router)
 
 
 

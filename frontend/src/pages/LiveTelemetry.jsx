@@ -3,7 +3,7 @@ import axios from 'axios'
 import LiveConsole from '../components/LiveConsole'
 
 export default function LiveTelemetry() {
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('ta_token') || localStorage.getItem('token')
 
   const [metrics, setMetrics] = useState({
     current_eps: 8450,

@@ -26,6 +26,8 @@ export default function ChaosEngineering() {
 
   useEffect(() => {
     fetchInitialData()
+    const interval = setInterval(fetchInitialData, 4000)
+    return () => clearInterval(interval)
   }, [])
 
   const fetchInitialData = async () => {

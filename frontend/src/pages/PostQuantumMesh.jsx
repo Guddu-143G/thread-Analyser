@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
 export default function PostQuantumMesh() {
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('ta_token') || localStorage.getItem('token')
 
   const [activeTab, setActiveTab] = useState('pqc') // pqc | pmu | gart | rollup
   const [feedback, setFeedback] = useState(null)

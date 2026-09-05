@@ -37,8 +37,8 @@ export default function Alerts() {
 
 
 
-  const load = useCallback(() => {
-    setLoading(true)
+  const load = useCallback((isQuiet = false) => {
+    if (!isQuiet) setLoading(true)
     const params = {}
     if (statusFilter) params.status = statusFilter
     if (severityFilter) params.severity = severityFilter
@@ -57,11 +57,17 @@ export default function Alerts() {
           setSelectedAlert(null)
         }
       })
-      .finally(() => setLoading(false))
+      .finally(() => {
+        if (!isQuiet) setLoading(false)
+      })
   }, [statusFilter, severityFilter, searchQuery])
 
   useEffect(() => {
     load()
+    const interval = setInterval(() => {
+      load(true)
+    }, 4000)
+    return () => clearInterval(interval)
   }, [load])
 
   const handleOpenTriage = (status) => {

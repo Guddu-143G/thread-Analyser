@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
 export default function SovereignEdge() {
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('ta_token') || localStorage.getItem('token')
 
   const [activeTab, setActiveTab] = useState('stride') // stride | zkpsi | mmr | wasm | sdr
   const [strideData, setStrideData] = useState(null)

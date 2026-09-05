@@ -27,6 +27,16 @@ import V17NeonMesh from './pages/V17NeonMesh'
 import V18LiveResponse from './pages/V18LiveResponse'
 import V19FleetMesh from './pages/V19FleetMesh'
 import V20EdgeRemediation from './pages/V20EdgeRemediation'
+import V21MobileForensics from './pages/V21MobileForensics'
+import V23SpatialLedger from './pages/V23SpatialLedger'
+import V24BasebandLedger from './pages/V24BasebandLedger'
+import V25CognitiveMatrix from './pages/V25CognitiveMatrix'
+import V26CausalProvenance from './pages/V26CausalProvenance'
+import V27MLAnomaly from './pages/V27MLAnomaly'
+import V28FederatedML from './pages/V28FederatedML'
+import V29SimulationSTG from './pages/V29SimulationSTG'
+import V30CyberRange from './pages/V30CyberRange'
+
 
 function ProtectedLayout({ children }) {
   const { user, loading } = useAuth()
@@ -71,6 +81,28 @@ export default function App() {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/dashboard" element={<ProtectedLayout><Dashboard /></ProtectedLayout>} />
+      <Route path="/v30-range" element={<ProtectedLayout><V30CyberRange /></ProtectedLayout>} />
+      <Route path="/digital-twin" element={<ProtectedLayout><V30CyberRange /></ProtectedLayout>} />
+      <Route path="/cyber-range" element={<ProtectedLayout><V30CyberRange /></ProtectedLayout>} />
+      <Route path="/v29-simulation" element={<ProtectedLayout><V29SimulationSTG /></ProtectedLayout>} />
+      <Route path="/purple-team" element={<ProtectedLayout><V29SimulationSTG /></ProtectedLayout>} />
+      <Route path="/v28-federation" element={<ProtectedLayout><V28FederatedML /></ProtectedLayout>} />
+      <Route path="/federated-ml" element={<ProtectedLayout><V28FederatedML /></ProtectedLayout>} />
+      <Route path="/v27-anomaly" element={<ProtectedLayout><V27MLAnomaly /></ProtectedLayout>} />
+      <Route path="/ml-anomaly" element={<ProtectedLayout><V27MLAnomaly /></ProtectedLayout>} />
+      <Route path="/v26-provenance" element={<ProtectedLayout><V26CausalProvenance /></ProtectedLayout>} />
+
+
+      <Route path="/causal-soar" element={<ProtectedLayout><V26CausalProvenance /></ProtectedLayout>} />
+      <Route path="/v25-matrix" element={<ProtectedLayout><V25CognitiveMatrix /></ProtectedLayout>} />
+      <Route path="/mitre-cognitive" element={<ProtectedLayout><V25CognitiveMatrix /></ProtectedLayout>} />
+      <Route path="/v24-baseband" element={<ProtectedLayout><V24BasebandLedger /></ProtectedLayout>} />
+      <Route path="/baseband-ledger" element={<ProtectedLayout><V24BasebandLedger /></ProtectedLayout>} />
+
+      <Route path="/v23-spatial" element={<ProtectedLayout><V23SpatialLedger /></ProtectedLayout>} />
+      <Route path="/spatial-ledger" element={<ProtectedLayout><V23SpatialLedger /></ProtectedLayout>} />
+      <Route path="/v21-forensics" element={<ProtectedLayout><V21MobileForensics /></ProtectedLayout>} />
+      <Route path="/mobile-forensics" element={<ProtectedLayout><V21MobileForensics /></ProtectedLayout>} />
       <Route path="/v20-edge" element={<ProtectedLayout><V20EdgeRemediation /></ProtectedLayout>} />
       <Route path="/edge-remediation" element={<ProtectedLayout><V20EdgeRemediation /></ProtectedLayout>} />
       <Route path="/v19-fleet" element={<ProtectedLayout><V19FleetMesh /></ProtectedLayout>} />

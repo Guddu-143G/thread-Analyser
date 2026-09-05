@@ -13,8 +13,8 @@ export default function LogExplorer() {
   const [limit] = useState(50)
   const [offset, setOffset] = useState(0)
 
-  const loadEvents = useCallback(() => {
-    setLoading(true)
+  const loadEvents = useCallback((isQuiet = false) => {
+    if (!isQuiet) setLoading(true)
     const params = { limit, offset }
     if (searchQuery) params.search = searchQuery
     if (selectedEventType) params.event_type = selectedEventType
@@ -24,11 +24,17 @@ export default function LogExplorer() {
     client
       .get('/events', { params })
       .then(({ data }) => setEvents(data))
-      .finally(() => setLoading(false))
+      .finally(() => {
+        if (!isQuiet) setLoading(false)
+      })
   }, [searchQuery, selectedEventType, selectedIP, selectedUser, limit, offset])
 
   useEffect(() => {
     loadEvents()
+    const interval = setInterval(() => {
+      loadEvents(true)
+    }, 4000)
+    return () => clearInterval(interval)
   }, [loadEvents])
 
   const exportData = (format) => {

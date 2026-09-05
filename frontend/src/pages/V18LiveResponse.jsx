@@ -48,11 +48,16 @@ export default function V18LiveResponse() {
     setTimeout(() => setFeedback(null), 5000)
   }
 
-  // Load initial data
+  // Load initial data & Real-time Live Engine Polling
   useEffect(() => {
     fetchMeshStatus()
     fetchDevices()
     fetchSessions()
+    const interval = setInterval(() => {
+      fetchDevices()
+      fetchSessions()
+    }, 4000)
+    return () => clearInterval(interval)
   }, [])
 
   // When sessions list changes or selectedSessionId changes, update currentSession & load logs

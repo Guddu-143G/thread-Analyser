@@ -1,6 +1,44 @@
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
+const v30CyberRangeLinks = [
+  { to: '/v30-range', label: 'Cyber Range & Digital Twin', icon: '⚡' },
+]
+
+const v29SimulationLinks = [
+  { to: '/v29-simulation', label: 'Simulation & Purple-Team', icon: '🔥' },
+]
+
+const v28FederationLinks = [
+  { to: '/v28-federation', label: 'Federated ML Mesh', icon: '🌐' },
+]
+
+const v27AnomalyLinks = [
+  { to: '/v27-anomaly', label: 'ML Anomaly Engine', icon: '🤖' },
+]
+
+const v26ProvenanceLinks = [
+  { to: '/v26-provenance', label: 'Causal Provenance & SOAR', icon: '🕸️' },
+]
+
+
+
+const v25CognitiveLinks = [
+  { to: '/v25-matrix', label: 'MITRE ATT&CK Matrix & MDPS', icon: '🎯' },
+]
+
+const v24BasebandLinks = [
+  { to: '/v24-baseband', label: 'Baseband IMEI & Merkle Ledger', icon: '⚡' },
+]
+
+const v23SpatialLinks = [
+  { to: '/v23-spatial', label: 'Spatial-Temporal Ledger & eBPF', icon: '⚛️' },
+]
+
+const v21ForensicsLinks = [
+  { to: '/v21-forensics', label: 'Mobile Forensics & HID', icon: '📱' },
+]
+
 const v20EdgeLinks = [
   { to: '/v20-edge', label: 'Edge Remediation & GPS', icon: '📡' },
 ]
@@ -69,7 +107,7 @@ export default function Sidebar() {
           <span className="text-accent text-xl font-mono font-bold">◆</span>
           <div>
             <span className="font-mono font-bold text-slate-100 tracking-wider text-sm block">THREAT ANALYSER</span>
-            <span className="text-[10px] text-teal-400 font-mono tracking-widest uppercase">Edge Vanguard v20.0</span>
+            <span className="text-[10px] text-purple-400 font-mono tracking-widest uppercase">Simulation STG v29.0</span>
           </div>
         </div>
       </div>
@@ -77,19 +115,190 @@ export default function Sidebar() {
       {/* Global Status Pill */}
       <div className="px-4 py-2.5 bg-base-950/60 border-b border-base-700/80 flex items-center justify-between text-xs">
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
-          <span className="text-slate-400 font-mono text-[11px]">ADAPTIVE GPS: <span className="text-teal-400 font-semibold">ACTIVE</span></span>
+          <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+          <span className="text-slate-400 font-mono text-[11px]">GSDT RANGE: <span className="text-cyan-400 font-semibold">ACTIVE</span></span>
         </div>
-        <span className="text-[10px] text-teal-400 font-mono font-bold">99.99999999/100</span>
+        <span className="text-[10px] text-cyan-400 font-mono font-bold">v30.0</span>
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-3 space-y-1 overflow-y-auto">
-        <div className="px-3 py-1 text-[10px] uppercase font-mono tracking-wider text-teal-400 font-bold flex items-center justify-between">
-          <span>Edge Remediation &amp; GPS</span>
-          <span className="text-[9px] bg-teal-950 text-teal-300 px-1 rounded border border-teal-800">v20.0</span>
+        <div className="px-3 py-1 text-[10px] uppercase font-mono tracking-wider text-cyan-400 font-bold flex items-center justify-between">
+          <span>Cyber Range &amp; Twin</span>
+          <span className="text-[9px] bg-cyan-950 text-cyan-300 px-1 rounded border border-cyan-800">v30.0</span>
         </div>
-        {v20EdgeLinks.map((l) => (
+        {v30CyberRangeLinks.map((l) => (
+          <NavLink
+            key={l.to}
+            to={l.to}
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                isActive
+                  ? 'bg-cyan-950 text-cyan-200 border border-cyan-500/60 font-semibold shadow-sm'
+                  : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
+              }`
+            }
+          >
+            <span className="w-4 text-center font-mono">{l.icon}</span>
+            {l.label}
+          </NavLink>
+        ))}
+
+        <div className="px-3 py-1 text-[10px] uppercase font-mono tracking-wider text-purple-400 font-bold flex items-center justify-between">
+          <span>Simulation &amp; Purple-Team</span>
+          <span className="text-[9px] bg-purple-950 text-purple-300 px-1 rounded border border-purple-800">v29.0</span>
+        </div>
+        {v29SimulationLinks.map((l) => (
+          <NavLink
+            key={l.to}
+            to={l.to}
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                isActive
+                  ? 'bg-purple-950 text-purple-200 border border-purple-600/60 font-semibold shadow-sm'
+                  : 'text-slate-300 hover:text-purple-200 hover:bg-base-800/80'
+              }`
+            }
+          >
+            <span className="w-4 text-center font-mono">{l.icon}</span>
+            {l.label}
+          </NavLink>
+        ))}
+
+        <div className="px-3 py-1 text-[10px] uppercase font-mono tracking-wider text-indigo-400 font-bold flex items-center justify-between">
+          <span>Federated ML Mesh</span>
+          <span className="text-[9px] bg-indigo-950 text-indigo-300 px-1 rounded border border-indigo-800">v28.0</span>
+        </div>
+        {v28FederationLinks.map((l) => (
+          <NavLink
+            key={l.to}
+            to={l.to}
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                isActive
+                  ? 'bg-indigo-950 text-indigo-200 border border-indigo-600/60 font-semibold shadow-sm'
+                  : 'text-slate-300 hover:text-indigo-200 hover:bg-base-800/80'
+              }`
+            }
+          >
+            <span className="w-4 text-center font-mono">{l.icon}</span>
+            {l.label}
+          </NavLink>
+        ))}
+
+        <div className="px-3 py-1 text-[10px] uppercase font-mono tracking-wider text-cyan-400 font-bold flex items-center justify-between">
+          <span>ML Anomaly Engine</span>
+          <span className="text-[9px] bg-cyan-950 text-cyan-300 px-1 rounded border border-cyan-800">v27.0</span>
+        </div>
+        {v27AnomalyLinks.map((l) => (
+          <NavLink
+            key={l.to}
+            to={l.to}
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                isActive
+                  ? 'bg-cyan-950 text-cyan-200 border border-cyan-600/60 font-semibold shadow-sm'
+                  : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
+              }`
+            }
+          >
+            <span className="w-4 text-center font-mono">{l.icon}</span>
+            {l.label}
+          </NavLink>
+        ))}
+
+
+        <div className="px-3 py-1 text-[10px] uppercase font-mono tracking-wider text-cyan-400 font-bold flex items-center justify-between">
+          <span>Causal Provenance &amp; SOAR</span>
+          <span className="text-[9px] bg-cyan-950 text-cyan-300 px-1 rounded border border-cyan-800">v26.0</span>
+        </div>
+        {v26ProvenanceLinks.map((l) => (
+          <NavLink
+            key={l.to}
+            to={l.to}
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                isActive
+                  ? 'bg-cyan-950 text-cyan-200 border border-cyan-600/60 font-semibold shadow-sm'
+                  : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
+              }`
+            }
+          >
+            <span className="w-4 text-center font-mono">{l.icon}</span>
+            {l.label}
+          </NavLink>
+        ))}
+
+
+        <div className="px-3 py-1 text-[10px] uppercase font-mono tracking-wider text-indigo-400 font-bold flex items-center justify-between">
+          <span>MITRE Matrix &amp; MDPS</span>
+          <span className="text-[9px] bg-indigo-950 text-indigo-300 px-1 rounded border border-indigo-800">v25.0</span>
+        </div>
+        {v25CognitiveLinks.map((l) => (
+          <NavLink
+            key={l.to}
+            to={l.to}
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                isActive
+                  ? 'bg-indigo-950 text-indigo-200 border border-indigo-600/60 font-semibold shadow-sm'
+                  : 'text-slate-300 hover:text-indigo-200 hover:bg-base-800/80'
+              }`
+            }
+          >
+            <span className="w-4 text-center font-mono">{l.icon}</span>
+            {l.label}
+          </NavLink>
+        ))}
+
+        <div className="px-3 py-1 text-[10px] uppercase font-mono tracking-wider text-emerald-400 font-bold flex items-center justify-between">
+          <span>Physical Baseband &amp; Ledger</span>
+          <span className="text-[9px] bg-emerald-950 text-emerald-300 px-1 rounded border border-emerald-800">v24.0</span>
+        </div>
+        {v24BasebandLinks.map((l) => (
+          <NavLink
+            key={l.to}
+            to={l.to}
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                isActive
+                  ? 'bg-emerald-950 text-emerald-200 border border-emerald-600/60 font-semibold shadow-sm'
+                  : 'text-slate-300 hover:text-emerald-200 hover:bg-base-800/80'
+              }`
+            }
+          >
+            <span className="w-4 text-center font-mono">{l.icon}</span>
+            {l.label}
+          </NavLink>
+        ))}
+
+
+        <div className="px-3 py-1 text-[10px] uppercase font-mono tracking-wider text-indigo-400 font-bold flex items-center justify-between">
+          <span>Spatial UEBA &amp; Merkle</span>
+          <span className="text-[9px] bg-indigo-950 text-indigo-300 px-1 rounded border border-indigo-800">v23.0</span>
+        </div>
+        {v23SpatialLinks.map((l) => (
+          <NavLink
+            key={l.to}
+            to={l.to}
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                isActive
+                  ? 'bg-indigo-950 text-indigo-200 border border-indigo-600/60 font-semibold shadow-sm'
+                  : 'text-slate-300 hover:text-indigo-200 hover:bg-base-800/80'
+              }`
+            }
+          >
+            <span className="w-4 text-center font-mono">{l.icon}</span>
+            {l.label}
+          </NavLink>
+        ))}
+
+        <div className="px-3 py-1 text-[10px] uppercase font-mono tracking-wider text-teal-400 font-bold flex items-center justify-between">
+          <span>Mobile Forensics &amp; HID</span>
+          <span className="text-[9px] bg-teal-950 text-teal-300 px-1 rounded border border-teal-800">v21.0</span>
+        </div>
+        {v21ForensicsLinks.map((l) => (
           <NavLink
             key={l.to}
             to={l.to}
@@ -98,6 +307,27 @@ export default function Sidebar() {
                 isActive
                   ? 'bg-teal-950 text-teal-200 border border-teal-600/60 font-semibold shadow-sm'
                   : 'text-slate-300 hover:text-teal-200 hover:bg-base-800/80'
+              }`
+            }
+          >
+            <span className="w-4 text-center font-mono">{l.icon}</span>
+            {l.label}
+          </NavLink>
+        ))}
+
+        <div className="px-3 py-1 text-[10px] uppercase font-mono tracking-wider text-cyan-400 font-bold flex items-center justify-between">
+          <span>Edge Remediation &amp; GPS</span>
+          <span className="text-[9px] bg-cyan-950 text-cyan-300 px-1 rounded border border-cyan-800">v20.0</span>
+        </div>
+        {v20EdgeLinks.map((l) => (
+          <NavLink
+            key={l.to}
+            to={l.to}
+            className={({ isActive }) =>
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                isActive
+                  ? 'bg-cyan-950 text-cyan-200 border border-cyan-600/60 font-semibold shadow-sm'
+                  : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
               }`
             }
           >

@@ -5,6 +5,9 @@ const client = axios.create({
 })
 
 client.interceptors.request.use((config) => {
+  if (config.url?.startsWith('/api/')) {
+    config.url = config.url.replace(/^\/api/, '')
+  }
   const token = localStorage.getItem('ta_token')
   if (token) {
     config.headers.Authorization = `Bearer ${token}`

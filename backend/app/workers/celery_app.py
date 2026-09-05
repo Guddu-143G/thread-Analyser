@@ -16,7 +16,7 @@ celery_app.conf.update(
     enable_utc=True,
 )
 
-celery_app.autodiscover_tasks(["app.workers"])
+celery_app.autodiscover_tasks(["app.workers", "app.tasks"])
 
 celery_app.conf.beat_schedule = {
     "refresh-threat-intel-hourly": {
@@ -24,3 +24,4 @@ celery_app.conf.beat_schedule = {
         "schedule": 3600.0,
     },
 }
+

@@ -10,13 +10,19 @@ export default function ThreatIntel() {
   const [importMsg, setImportMsg] = useState('')
   const fileRef = useRef(null)
 
-  const load = useCallback(() => {
-    setLoading(true)
-    client.get('/ioc').then(({ data }) => setIocs(data)).finally(() => setLoading(false))
+  const load = useCallback((isQuiet = false) => {
+    if (!isQuiet) setLoading(true)
+    client.get('/ioc').then(({ data }) => setIocs(data)).finally(() => {
+      if (!isQuiet) setLoading(false)
+    })
   }, [])
 
   useEffect(() => {
     load()
+    const interval = setInterval(() => {
+      load(true)
+    }, 5000)
+    return () => clearInterval(interval)
   }, [load])
 
   const submit = async (e) => {

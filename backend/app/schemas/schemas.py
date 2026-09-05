@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional, Any
+from typing import Optional, Any, List, Dict, Union
 
 from pydantic import BaseModel, EmailStr, ConfigDict, Field
 
@@ -1325,3 +1325,1122 @@ class V20EdgeRemediationStatusOut(BaseModel):
     active_geofences_count: int
     total_terminal_streams: int
     system_integrity: str
+
+
+# ---------------------------------------------------------
+# Version 21: Hardware-Assisted Mobile Forensics & Passcode Auditing Schemas
+# ---------------------------------------------------------
+
+class V21DeviceProbeIn(BaseModel):
+    usb_port_path: Optional[str] = "/dev/bus/usb/001/004"
+    probe_protocol: Optional[str] = "AUTO" # AUTO, USBMUXD, ADB, LIBUSB
+
+
+class V21DeviceProbeOut(BaseModel):
+    device_id: str
+    manufacturer: str
+    model: str
+    serial_number: str
+    udid: str
+    os_name: str
+    os_version: str
+    battery_level: int
+    is_encrypted: bool
+    connection_type: str
+    usb_vid: Optional[str] = "0x18d1"
+    usb_pid: Optional[str] = "0x4ee1"
+    status: str
+
+
+class V21ForensicSessionCreateIn(BaseModel):
+    device_name: str
+    device_model: str
+    serial_number: str
+    udid: str
+    os_name: str
+    os_version: str
+    connection_type: Optional[str] = "USB"
+    passcode_type: str = "PATTERN" # PATTERN, PIN_4, PIN_6, ALPHANUMERIC
+    target_mock_passcode: Optional[str] = "1994"
+
+
+class V21ForensicSessionOut(BaseModel):
+    session_id: str
+    org_id: str
+    analyst_id: str
+    device_name: str
+    device_model: str
+    serial_number: str
+    udid: str
+    os_name: str
+    os_version: str
+    connection_type: str
+    passcode_type: str
+    max_estimated_entropy: float
+    created_at: str
+    completed_at: Optional[str] = None
+    status: str
+    total_attempts_count: Optional[int] = 0
+    is_unlocked: Optional[bool] = False
+
+
+class V21PasscodeAttemptIn(BaseModel):
+    candidate_passcode: str
+    pattern_path: Optional[List[int]] = None
+    passcode_type: Optional[str] = "PIN_4"
+
+
+class V21PasscodeAttemptOut(BaseModel):
+    attempt_id: Optional[int] = None
+    session_id: str
+    attempt_index: int
+    entropy: float
+    is_successful: bool
+    response_code: str
+    latency_ms: int
+    candidate_hash: str
+    pattern_path: Optional[List[int]] = None
+    backoff_triggered_sec: float
+    timestamp: str
+
+
+class V21AuditRunIn(BaseModel):
+    max_attempts: Optional[int] = 20
+    delay_between_attempts_sec: Optional[float] = 0.05
+    target_secret_override: Optional[str] = None
+
+
+class V21AuditRunOut(BaseModel):
+    session_id: str
+    status: str
+    total_attempts_run: int
+    is_unlocked: bool
+    last_response_code: str
+    backoff_active_sec: float
+    final_entropy: float
+    attempts_history: List[V21PasscodeAttemptOut]
+
+
+class V21ForensicStatusOut(BaseModel):
+    status: str
+    engine_version: str
+    ocsf_class_mapping: str
+    hid_emulation_driver: str
+    total_forensic_sessions: int
+    active_sessions_count: int
+    total_passcode_attempts: int
+    lockout_events_detected: int
+    supported_vectors: List[str]
+    system_integrity: str
+
+
+# ---------------------------------------------------------
+# Version 23: Spatial-Temporal GNN, eBPF CO-RE RASP, CPA & Merkle Ledger Schemas
+# ---------------------------------------------------------
+
+class V23StatusOut(BaseModel):
+    status: str
+    version: str
+    gnn_model_type: str
+    ebpf_driver_type: str
+    side_channel_mode: str
+    ledger_integrity_state: str
+    total_ledger_records: int
+    gnn_active_nodes: int
+    gnn_active_edges: int
+    cpa_reconstruction_fidelity: float
+    system_integrity: str
+
+
+class V23GNNEventIn(BaseModel):
+    event_type: str # auth, process, file, network
+    source_entity: str # e.g. "admin", "srv-app-01", "mimikatz.exe"
+    target_entity: str # e.g. "srv-app-01", "pg_dump", "/etc/shadow", "10.0.0.5"
+    class_uid: Optional[int] = 3002
+    metadata: Optional[Dict[str, Any]] = None
+
+
+class V23GNNTopologyOut(BaseModel):
+    total_nodes: int
+    total_edges: int
+    pyg_tensor_shapes: Dict[str, str]
+    mean_anomaly_score: float
+    max_anomaly_score: float
+    is_anomalous: bool
+    nodes: List[Dict[str, Any]]
+    edges: List[Dict[str, Any]]
+
+
+class V23GNNAnomalyOut(BaseModel):
+    is_anomalous: bool
+    mean_anomaly_score: float
+    max_anomaly_score: float
+    top_anomalous_nodes: List[Dict[str, Any]]
+    evaluated_edges_count: int
+
+
+class V23RASPPolicyIn(BaseModel):
+    uid: int = 1000
+    enforce_kill: bool = True
+
+
+class V23RASPStatusOut(BaseModel):
+    status: str
+    btf_available: bool
+    btf_path: str
+    kernel_hook: str
+    relocation_type: str
+    active_policies_count: int
+    blocked_paths: List[str]
+    driver: str
+
+
+class V23RASPSimulationIn(BaseModel):
+    uid: int = 1000
+    binary_path: str = "/dev/shm/.stealth_dropper"
+    command_args: Optional[str] = "--inject"
+
+
+class V23RASPSimulationOut(BaseModel):
+    uid: int
+    binary_path: str
+    command_args: Optional[str] = ""
+    policy_enforced: bool
+    is_risky_path: bool
+    action: str
+    exit_code: int
+    reason: str
+
+
+class V23SideChannelTraceIn(BaseModel):
+    num_traces: Optional[int] = 50
+    key_length: Optional[int] = 8
+    target_key_hex: Optional[str] = "5345435245543233" # ASCII "SECRET23"
+    noise_level: Optional[float] = 0.25
+
+
+class V23SideChannelTraceOut(BaseModel):
+    traces_generated_count: int
+    sample_trace_wave: List[float]
+    power_consumption_mean_mw: float
+    simulated_sampling_rate_msps: float
+    noise_deviation: float
+
+
+class V23CPAAnalysisIn(BaseModel):
+    num_traces: Optional[int] = 100
+    key_length: Optional[int] = 8
+    target_key_hex: Optional[str] = "5345435245543233"
+
+
+class V23CPAAnalysisOut(BaseModel):
+    key_length_bytes: int
+    traces_analyzed_count: int
+    max_correlation_peak: float
+    recovered_key_hex: str
+    recovered_key_text: str
+    correlation_matrix: List[Dict[str, Any]]
+    status: str
+
+
+class V23LedgerAppendIn(BaseModel):
+    device_id: str
+    hostname: str
+    ip_address: str
+    system_status: Optional[str] = "active"
+    operation_type: Optional[str] = "UPDATE"
+
+
+class V23LedgerRecordOut(BaseModel):
+    ledger_id: str
+    device_id: str
+    org_id: str
+    hostname: str
+    ip_address: str
+    system_status: str
+    operation_type: str
+    transaction_timestamp: str
+    parent_hash: Optional[str]
+    record_hash: str
+
+
+class V23LedgerVerifyOut(BaseModel):
+    total_records: int
+    is_valid: bool
+    chain_status: str
+    verified_blocks: int
+    tampered_blocks_count: int
+    genesis_hash: str
+    latest_root_hash: str
+    tampered_details: List[Dict[str, Any]]
+
+
+# ==========================================
+# Version 24: Baseband IMEI, Adaptive GPS, Network Audit & Merkle Ledger Schemas
+# ==========================================
+
+class V24StatusOut(BaseModel):
+    status: str
+    version: str
+    modem_layer: str
+    gps_engine: str
+    network_auditor_mode: str
+    audit_ledger_status: str
+    total_audit_blocks: int
+    system_integrity: str
+
+
+class V24ModemProbeIn(BaseModel):
+    raw_at_command: Optional[str] = "AT+CGSN"
+    at_command: Optional[str] = None
+    mock_serial_port: Optional[str] = "/dev/ttyUSB0"
+    serial_port: Optional[str] = None
+
+
+class V24ModemProbeOut(BaseModel):
+    valid: bool
+    command_executed: str
+    imei: Optional[str]
+    tac: Optional[str]
+    fac: Optional[str]
+    snr: Optional[str]
+    check_digit: Optional[str]
+    status: str
+    access_technology: Optional[str] = "LTE 4G"
+
+
+class V24TriangulationIn(BaseModel):
+    imei: Optional[str] = None
+    towers: Optional[List[Dict[str, Any]]] = None
+    default_lat: Optional[float] = 37.7749
+    default_lon: Optional[float] = -122.4194
+
+
+class V24TriangulationOut(BaseModel):
+    latitude: float
+    longitude: float
+    accuracy_radius_meters: float
+    towers_used_count: int
+    triangulation_algorithm: str
+    towers_metadata: List[Dict[str, Any]]
+
+
+class V24CeirBlacklistIn(BaseModel):
+    imei: str
+    action: Optional[str] = None
+    is_stolen: bool = True
+    reason: Optional[str] = "SOC_ASSET_THEFT_CONTAINMENT"
+
+
+class V24CeirBlacklistOut(BaseModel):
+    imei: str
+    ceir_list_status: str
+    gsma_device_status: str
+    global_blocking_active: bool
+    blacklist_reason: Optional[str]
+    updated_at: int
+
+
+class V24GPSUpdateIn(BaseModel):
+    current_lat: Optional[float] = 37.7833
+    current_lon: Optional[float] = -122.4167
+    current_latitude: Optional[float] = None
+    current_longitude: Optional[float] = None
+    battery_pct: Optional[float] = 85.0
+    battery_percentage: Optional[float] = None
+    geofence_center_lat: Optional[float] = 37.7749
+    geofence_center_lon: Optional[float] = -122.4194
+    geofence_radius_meters: Optional[float] = 20000.0
+    simulated_speed_kmh: Optional[float] = None
+
+
+class V24GPSUpdateOut(BaseModel):
+    state: str
+    speed_mps: float
+    speed_kmh: float
+    distance_to_center_m: float
+    outside_geofence: bool
+    battery_pct: float
+    next_scheduled_interval: int
+
+
+class V24NetworkAuditIn(BaseModel):
+    interface_name: Optional[str] = "wlan0"
+    local_ip: Optional[str] = "192.168.1.144"
+    ip_address: Optional[str] = None
+    mac_address: Optional[str] = "00:0a:95:9d:68:16"
+    gateway_ip: Optional[str] = "192.168.1.1"
+    gateway_mac: Optional[str] = "a0:04:cb:11:ff:dd"
+    subnet_mask: Optional[str] = "255.255.255.0"
+    dns_servers: Optional[List[str]] = None
+
+
+class V24NetworkAuditOut(BaseModel):
+    interface_name: str
+    ip_address: str
+    mac_address: str
+    subnet_mask: str
+    gateway_ip: str
+    gateway_mac: str
+    gateway_vendor: str
+    dns_servers: List[str]
+    is_mitm_detected: bool
+    mitm_threat_reason: Optional[str]
+    is_randomized_mac: bool
+    baseline_gateway_mac: str
+    status: str
+    timestamp: int
+
+
+class V24ARPMitmIn(BaseModel):
+    interface_name: Optional[str] = "wlan0"
+    rogue_gateway_mac: Optional[str] = "de:ad:be:ef:13:37"
+    mutated_gateway_mac: Optional[str] = None
+    original_gateway_mac: Optional[str] = None
+    gateway_ip: Optional[str] = None
+    ip_address: Optional[str] = None
+    mac_address: Optional[str] = None
+
+
+class V24AuditLedgerAppendIn(BaseModel):
+    action: str = "SECURITY_RULE_MODIFIED"
+    actor_email: str = "admin@acme.corp"
+    ip_address: str = "192.168.1.50"
+    mac_address: str = "00:1A:2B:3C:4D:5E"
+    device_id: Optional[str] = "dev-corp-sec-01"
+
+
+class V24AuditLedgerRecordOut(BaseModel):
+    sequence_id: int
+    org_id: str
+    device_id: Optional[str]
+    event_timestamp: str
+    action: str
+    actor_email: str
+    ip_address: str
+    mac_address: str
+    payload_hash: str
+    previous_record_hash: Optional[str]
+    current_ledger_hash: str
+
+
+class V24AuditLedgerVerifyOut(BaseModel):
+    total_records: int
+    is_valid: bool
+    chain_status: str
+    verified_blocks: int
+    tampered_blocks_count: int
+    genesis_hash: str
+    latest_tip_hash: str
+    tampered_details: List[Dict[str, Any]]
+
+
+# ==========================================
+# Version 25: Real-Time MITRE Matrix, MDPS & Explainable AI Schemas
+# ==========================================
+
+class V25StatusOut(BaseModel):
+    status: str
+    version: str
+    pipeline_throughput_eps: float
+    pipeline_latency_ms: float
+    total_events_ingested: int
+    total_mitre_alerts: int
+    active_tactics_count: int
+    ai_summaries_generated: int
+    stream_broker_status: str
+    system_integrity: str
+
+
+class V25LogEventIn(BaseModel):
+    device_id: Optional[str] = "dev-core-node-01"
+    ocsf_class_id: Optional[int] = 4001
+    source_ip: Optional[str] = "192.168.1.105"
+    destination_ip: Optional[str] = "185.220.101.5"
+    command: Optional[str] = None
+    process_name: Optional[str] = None
+    uri: Optional[str] = None
+    payload: Optional[str] = None
+    technique_id: Optional[str] = None
+    anomaly_score: Optional[float] = 65.0
+    asset_criticality: Optional[float] = 70.0
+    intel_confidence: Optional[float] = 80.0
+    metadata: Optional[Dict[str, Any]] = None
+
+
+class V25IngestLogStreamIn(BaseModel):
+    batch_size: Optional[int] = 100
+    events: Optional[List[V25LogEventIn]] = None
+    source_stream: Optional[str] = "logs:raw_stream"
+
+
+class V25IngestResultOut(BaseModel):
+    batch_id: str
+    events_received: int
+    events_processed: int
+    alerts_generated: int
+    instantaneous_eps: float
+    latency_ms: float
+    status: str
+    sample_alerts: List[Dict[str, Any]]
+
+
+class V25PriorityScoreIn(BaseModel):
+    anomaly_score: float = 85.0
+    mitre_weight: float = 80.0
+    asset_criticality: float = 75.0
+    intel_confidence: float = 90.0
+
+
+class V25PriorityScoreOut(BaseModel):
+    final_score: float
+    priority_level: str
+    breakdown: Dict[str, Any]
+
+
+class V25AISummaryIn(BaseModel):
+    model_config = {"protected_namespaces": ()}
+    alert_id: Optional[str] = None
+    technique_id: Optional[str] = "T1059"
+    technique_name: Optional[str] = "Command and Scripting Interpreter"
+    tactic_id: Optional[str] = "TA0002"
+    tactic_name: Optional[str] = "Execution"
+    priority_score: Optional[float] = 88.5
+    priority_level: Optional[str] = "CRITICAL"
+    source_ip: Optional[str] = "192.168.1.45"
+    destination_ip: Optional[str] = "185.220.101.5"
+    payload_summary: Optional[str] = "PowerShell download cradle invoking mimikatz with user admin@acme.corp"
+    raw_event_data: Optional[Dict[str, Any]] = None
+
+
+class V25AISummaryOut(BaseModel):
+    model_config = {"protected_namespaces": ()}
+    summary_id: str
+    alert_id: Optional[str]
+    sanitized_input: str
+    model_used: str
+    executive_summary: str
+    threat_actor_attribution: Optional[str]
+    actionable_remediation: str
+    created_at: str
+
+
+
+class V25MitreAlertOut(BaseModel):
+    alert_id: str
+    org_id: str
+    device_id: Optional[str]
+    source_ip: Optional[str]
+    destination_ip: Optional[str]
+    technique_id: str
+    technique_name: Optional[str]
+    tactic_id: str
+    tactic_name: Optional[str]
+    anomaly_score: float
+    mitre_weight: float
+    asset_criticality: float
+    intel_confidence: float
+    priority_score: float
+    priority_level: str
+    payload_summary: Optional[str]
+    parent_alert_hash: Optional[str]
+    alert_hash: str
+    created_at: str
+
+
+class V25MitreHeatmapOut(BaseModel):
+    total_alerts: int
+    overall_avg_priority: float
+    matrix: List[Dict[str, Any]]
+    generated_at: str
+
+
+# ==========================================
+# Version 26.0 Causal Provenance & SOAR Schemas
+# ==========================================
+
+class V26StatusOut(BaseModel):
+    version: str
+    provenance_graph_nodes: int
+    provenance_graph_edges: int
+    active_soar_playbooks: int
+    tpm_hardware_status: Dict[str, Any]
+    system_integrity: str
+    timestamp: str
+
+
+class V26ProvenanceNodeIn(BaseModel):
+    node_type: str = "PROCESS" # PROCESS, FILE, SOCKET, DOMAIN, IP_ADDRESS, USER
+    entity_key: str = "proc:/usr/bin/powershell"
+    name: str = "powershell"
+    device_id: Optional[str] = None
+    node_metadata: Optional[Dict[str, Any]] = None
+
+
+class V26ProvenanceNodeOut(BaseModel):
+    id: str
+    org_id: str
+    device_id: str
+    node_type: str
+    entity_key: str
+    name: str
+    node_metadata: Dict[str, Any]
+    created_at: str
+
+
+class V26ProvenanceEdgeIn(BaseModel):
+    source_node_id: str
+    target_node_id: str
+    relation_type: str = "SPAWNED" # EXECUTED, SPAWNED, READ, WROTE, CONNECTED_TO, RESOLVED
+    edge_weight: float = 1.0
+    metadata: Optional[Dict[str, Any]] = None
+
+
+class V26ProvenanceEdgeOut(BaseModel):
+    id: str
+    org_id: str
+    source_node_id: str
+    target_node_id: str
+    source_name: Optional[str] = None
+    target_name: Optional[str] = None
+    source_type: Optional[str] = None
+    target_type: Optional[str] = None
+    relation_type: str
+    edge_weight: float
+    edge_hash_sha256: Optional[str]
+    metadata: Optional[Dict[str, Any]] = None
+    timestamp: str
+
+
+class V26GraphQueryOut(BaseModel):
+    org_id: str
+    total_nodes: int
+    total_edges: int
+    nodes: List[Dict[str, Any]]
+    edges: List[Dict[str, Any]]
+    node_types_count: Dict[str, int]
+    timestamp: str
+
+
+class V26TracebackIn(BaseModel):
+    target_entity_or_id: str = "powershell"
+    max_depth: int = 10
+    asp_shell_descendants_only: bool = True
+
+
+class V26TracebackOut(BaseModel):
+    status: str
+    patient_zero_node: Optional[Dict[str, Any]]
+    target_node: Optional[Dict[str, Any]]
+    causal_path_nodes: List[Dict[str, Any]]
+    causal_path_edges: List[Dict[str, Any]]
+    depth: int
+    total_nodes_traversed: int
+    total_edges_traversed: int
+    latency_ms: float
+
+
+class V26SOARPlaybookIn(BaseModel):
+    name: str = "High-Risk Threat Edge Isolation"
+    playbook_yaml: str
+    is_active: bool = True
+
+
+class V26SOARPlaybookOut(BaseModel):
+    id: str
+    org_id: str
+    name: str
+    is_active: bool
+    playbook_yaml: str
+    created_at: str
+
+
+class V26SOARExecuteIn(BaseModel):
+    playbook_id: Optional[str] = None
+    device_id: Optional[str] = None
+    threat_context: Optional[Dict[str, Any]] = None
+
+
+class V26SOARExecuteOut(BaseModel):
+    playbook_id: Optional[str]
+    playbook_name: Optional[str]
+    device_id: str
+    status: str
+    total_steps_executed: int
+    execution_duration_ms: float
+    steps_executed: List[Dict[str, Any]]
+    threat_context: Dict[str, Any]
+    timestamp: str
+
+
+class V26SOARExecutionLogOut(BaseModel):
+    id: str
+    org_id: str
+    playbook_id: str
+    playbook_name: Optional[str] = None
+    device_id: str
+    status: str
+    execution_dag_trace: Dict[str, Any]
+    started_at: str
+    completed_at: Optional[str] = None
+
+
+class V26TPMAttestIn(BaseModel):
+    block_limit: int = 1000
+    alert_ids: Optional[List[str]] = None
+
+
+class V26TPMAttestOut(BaseModel):
+    id: str
+    org_id: str
+    block_start_id: str
+    block_end_id: str
+    total_alerts_attested: int
+    merkle_root_hash: str
+    pcr_composite_digest: str
+    tpm_hardware_signature: str
+    attestation_status: str
+    attested_at: str
+
+
+class V26TPMVerifyIn(BaseModel):
+    merkle_root_hash: str
+    tpm_hardware_signature: str
+    pcr_composite_digest: Optional[str] = None
+
+
+class V26TPMVerifyOut(BaseModel):
+    is_attestation_valid: bool
+    merkle_root_hash: str
+    status: str
+    pcr_integrity_verified: bool
+    verified_at: str
+
+
+# ==========================================
+# Version 27 Schemas: ML Anomaly Engine
+# ==========================================
+
+class V27TelemetryEventIn(BaseModel):
+    request_rate_1m: Optional[float] = 0.0
+    request_rate_5m: Optional[float] = 0.0
+    failed_auth_count: Optional[int] = 0
+    payload_entropy: Optional[float] = 0.0
+    unusual_port_flag: Optional[int] = 0
+    geo_distance_km: Optional[float] = 0.0
+    packet_size_variance: Optional[float] = 0.0
+    token_anomaly_score: Optional[float] = 0.0
+    session_duration_sec: Optional[float] = 0.0
+    concurrent_sessions: Optional[int] = 1
+    device_id: Optional[str] = None
+    ip_address: Optional[str] = None
+    endpoint: Optional[str] = None
+
+
+class V27FeatureContribution(BaseModel):
+    feature: str
+    value: float
+    z_score: float
+    deviation_level: str
+
+
+class V27AnomalyScoreOut(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+    is_anomaly: bool
+    anomaly_score: float
+    severity: str
+    decision_boundary: float
+    top_contributing_features: List[V27FeatureContribution]
+    pca_coordinates: List[float]
+    detector_version: str
+    model_fitted: bool
+    evaluated_at: float
+    org_id: str
+
+
+class V27ModelTrainIn(BaseModel):
+    lookback_days: int = Field(default=30, ge=1, le=365)
+    contamination: float = Field(default=0.05, ge=0.001, le=0.5)
+    n_estimators: int = Field(default=100, ge=10, le=500)
+    include_synthetic: bool = True
+
+
+class V27ModelTrainOut(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+    task_id: Optional[str] = None
+    status: str
+    org_id: str
+    model_id: str
+    samples_used: int
+    duration_sec: float
+    version: str
+    metrics: Dict[str, Any]
+    trained_at: str
+
+
+class V27FeatureBaselineOut(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+    id: str
+    model_id: str
+    feature_name: str
+    mean_value: float
+    std_value: float
+    min_value: float
+    max_value: float
+    importance_weight: float
+    calculated_at: str
+
+
+class V27ModelDetailsOut(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+    id: str
+    org_id: str
+    algorithm: str
+    version: str
+    contamination: float
+    training_samples_count: int
+    model_artifact_path: Optional[str] = None
+    status: str
+    metrics: Dict[str, Any]
+    created_at: str
+    updated_at: str
+    baselines: List[V27FeatureBaselineOut]
+    recent_runs: List[Dict[str, Any]]
+
+
+# ==============================================================
+# Version 28 Schemas: Federated ML & Collaborative Threat Mesh
+# ==============================================================
+
+class V28ClientUpdateIn(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+    model_id: Optional[str] = None
+    sample_count: int = Field(default=100, ge=1)
+    weights: Optional[List[float]] = None
+    checksum_signature: Optional[str] = None
+
+
+class V28ClientUpdateOut(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+    id: str
+    org_id: str
+    model_id: str
+    local_sample_count: int
+    checksum_signature: str
+    submitted_at: str
+    status: str = "SUBMITTED"
+
+
+class V28FederationAggregateIn(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+    model_name: str = "global_anomaly_forest"
+    min_clients: int = Field(default=2, ge=2, le=50)
+    dp_epsilon: float = Field(default=1.2, ge=0.1, le=10.0)
+
+
+class V28FederationRunOut(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+    id: str
+    global_model_id: str
+    consolidated_at: str
+    active_client_count: int
+    aggregated_loss: float
+    signature_proof: str
+    status: str = "CONSOLIDATED"
+    total_samples: int = 0
+    global_epoch: int = 1
+
+
+class V28GlobalModelOut(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+    id: str
+    model_name: str
+    version_id: int
+    org_id: Optional[str] = None
+    model_state: str
+    total_epochs_trained: int
+    metrics: Dict[str, Any]
+    created_at: str
+    updated_at: str
+    recent_runs: List[Dict[str, Any]]
+    active_client_updates: int
+
+
+class V28FederationStatusOut(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+    mesh_status: str
+    active_peers_count: int
+    global_model_version: int
+    total_samples_ingested: int
+    latest_federated_loss: float
+    differential_privacy_epsilon: float
+    homomorphic_encryption_scheme: str
+    version: str = "v28.0"
+
+
+# =========================================================================
+# Version 29 Schemas: Synthetic Telemetry Generation (STG) & Purple-Team Emulation
+# =========================================================================
+
+class SimulationStepBase(BaseModel):
+    step_order: int = Field(..., ge=1, description="Sequential order of the simulation step")
+    delay_seconds: int = Field(default=3, ge=0, le=60, description="Delay in seconds before firing this step")
+    ocsf_class_uid: int = Field(..., description="OCSF Class UID (e.g. 3002 for Auth, 1007 for Process, 4001 for Network)")
+    mock_log_payload: Dict[str, Any] = Field(..., description="OCSF JSON log payload")
+
+
+class SimulationStepCreate(SimulationStepBase):
+    pass
+
+
+class SimulationStepResponse(SimulationStepBase):
+    id: str
+    profile_id: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class SimulationProfileBase(BaseModel):
+    name: str = Field(..., min_length=2, max_length=100)
+    description: str = Field(...)
+    threat_actor: str = Field(..., max_length=50)
+    is_active: bool = True
+
+
+class SimulationProfileCreate(SimulationProfileBase):
+    steps: List[SimulationStepCreate] = Field(default_factory=list)
+
+
+class SimulationProfileResponse(SimulationProfileBase):
+    id: str
+    org_id: Optional[str] = None
+    created_at: datetime
+    steps: List[SimulationStepResponse] = Field(default_factory=list)
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class SimulationRunBase(BaseModel):
+    profile_id: str
+    status: str = "RUNNING"
+
+
+class SimulationRunResponse(BaseModel):
+    id: str
+    org_id: str
+    profile_id: str
+    started_at: datetime
+    completed_at: Optional[datetime] = None
+    status: str
+    alerts_triggered_count: int
+    triggered_alert_ids: List[Any] = Field(default_factory=list)
+    details: Dict[str, Any] = Field(default_factory=dict)
+    profile_name: Optional[str] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class SyntheticGenerationRequest(BaseModel):
+    count: int = Field(default=5000, ge=10, le=50000, description="Number of synthetic OCSF events to generate")
+    diurnal_profile: bool = Field(default=True, description="Apply diurnal business hour sine/cosine curve")
+    noise_ratio: float = Field(default=0.3, ge=0.0, le=1.0, description="Proportion of background benign noise")
+    user_clusters_count: int = Field(default=5, ge=1, le=50, description="Number of mock UEBA user clusters")
+    bootstrap_ml_coldstart: bool = Field(default=True, description="Train Isolation Forest model on generated telemetry")
+    inject_to_stream: bool = Field(default=True, description="Publish events into Redis raw stream logs:raw_stream")
+    persist_to_db: bool = Field(default=True, description="Persist sample logs into PostgreSQL logs table")
+
+
+class SyntheticGenerationResponse(BaseModel):
+    status: str
+    org_id: str
+    events_generated: int
+    events_persisted: int
+    events_streamed: int
+    ml_coldstart_bootstrapped: bool
+    ml_model_version: Optional[str] = None
+    diurnal_curve_applied: bool
+    user_clusters: List[str]
+    time_elapsed_sec: float
+    sample_events: List[Dict[str, Any]] = Field(default_factory=list)
+
+
+class SimulationTriggerRequest(BaseModel):
+    profile_id: str
+    async_execution: bool = True
+    delay_multiplier: float = Field(default=1.0, ge=0.1, le=5.0)
+
+
+class SimulationTriggerResponse(BaseModel):
+    run_id: str
+    profile_id: str
+    profile_name: str
+    status: str
+    steps_count: int
+    message: str
+
+
+class KedaScaleConfigResponse(BaseModel):
+    api_version: str = "keda.sh/v1alpha1"
+    kind: str = "ScaledObject"
+    metadata_name: str = "celery-worker-scaler"
+    stream_name: str = "logs:raw_stream"
+    target_backlog_threshold: int = 10000
+    min_replicas: int = 2
+    max_replicas: int = 50
+    redis_host: str = "redis://redis:6379/0"
+    argocd_sync_wave: int = 2
+    gitops_status: str = "HEALTHY_SYNCED"
+
+
+class V29StatusResponse(BaseModel):
+    stg_engine_version: str = "v29.0-sovereign-stg"
+    stg_active: bool = True
+    purple_team_emulation_active: bool = True
+    supported_threat_profiles: List[str]
+    keda_autoscaling_enabled: bool
+    cold_start_ml_readiness: str
+    redis_stream_backlog: int
+    version: str = "v29.0"
+
+
+# =========================================================================
+# Version 30 Schemas: Generative Security Digital Twin & Cyber Range
+# =========================================================================
+
+class TwinNodeBase(BaseModel):
+    name: str = Field(..., max_length=100)
+    asset_type: str = Field(..., max_length=50)  # WORKSTATION, DOMAIN_CONTROLLER, DATABASE_SERVER, etc.
+    hostname_hash: Optional[str] = None
+    ip_address_hash: Optional[str] = None
+    mac_address_hash: Optional[str] = None
+    os_version: str = "Linux 6.5.0"
+    criticality_id: int = Field(default=3, ge=1, le=5)
+    status: str = "SAFE"
+
+
+class TwinNodeCreate(TwinNodeBase):
+    pass
+
+
+class TwinNodeResponse(TwinNodeBase):
+    id: str
+    org_id: str
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class TwinRelationshipBase(BaseModel):
+    source_node_id: str
+    target_node_id: str
+    relationship_type: str = "NETWORK_ROUTE"
+
+
+class TwinRelationshipCreate(TwinRelationshipBase):
+    pass
+
+
+class TwinRelationshipResponse(TwinRelationshipBase):
+    id: str
+    org_id: str
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class TwinTopologyResponse(BaseModel):
+    nodes: List[TwinNodeResponse] = Field(default_factory=list)
+    relationships: List[TwinRelationshipResponse] = Field(default_factory=list)
+    total_assets: int = 0
+    zero_pii_sanitized: bool = True
+    anonymization_algorithm: str = "HMAC-SHA-256"
+
+
+class SimulationExecutionLedgerResponse(BaseModel):
+    id: str
+    org_id: str
+    session_id: str
+    step_index: int
+    mitre_tactic_id: str
+    mitre_technique_id: str
+    agent_action_description: str
+    simulated_ocsf_payload: Dict[str, Any]
+    is_detected: bool
+    remediation_triggered: Optional[str] = None
+    previous_step_hash: str
+    current_ledger_hash: str
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class GAANSessionBase(BaseModel):
+    scenario_name: str
+    red_agent_model: str = "local-mistral-7b-v1"
+    blue_agent_model: str = "local-mistral-7b-v1"
+
+
+class GAANSessionResponse(GAANSessionBase):
+    id: str
+    org_id: str
+    status: str
+    red_score: int
+    blue_score: int
+    started_at: datetime
+    ended_at: Optional[datetime] = None
+    steps: List[SimulationExecutionLedgerResponse] = Field(default_factory=list)
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class TriggerScenarioRequest(BaseModel):
+    scenario_name: str = Field(default="APT29_COZYBEAR")
+    red_agent_model: Optional[str] = "local-mistral-7b-v1"
+    blue_agent_model: Optional[str] = "local-mistral-7b-v1"
+    target_device_id: Optional[str] = None
+    async_execution: bool = True
+
+
+class TriggerScenarioResponse(BaseModel):
+    session_id: str
+    scenario_name: str
+    status: str
+    message: str
+    steps_count: int
+
+
+class CarrierBurstRequest(BaseModel):
+    eps_target: int = Field(default=1000000, ge=10000, le=5000000, description="Simulated EPS target volume")
+    duration_seconds: int = Field(default=5, ge=1, le=60)
+    packet_type: str = Field(default="NETFLOW_OCSF", description="Raw packet protocol simulation")
+
+
+class CarrierBurstResponse(BaseModel):
+    status: str
+    eps_achieved: int
+    total_packets_transmitted: int
+    ebpf_xdp_bypass_active: bool
+    ring_buffer_utilization_pct: float
+    kernel_bypass_latency_us: float
+    duration_seconds: int
+    pipeline_drop_rate: float = 0.0
+
+
+class V30StatusResponse(BaseModel):
+    gsdt_engine_version: str = "v30.0-gsdt-range"
+    cyber_range_active: bool = True
+    gaan_agents_active: bool = True
+    supported_scenarios: List[str]
+    carrier_scale_eps_capacity: int = 1000000
+    zero_pii_compliance_mode: str = "HMAC-SHA-256-SAFE-CLONE"
+    version: str = "v30.0"
+
+
+
+
+
+
+
+
+
+

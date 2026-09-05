@@ -37,15 +37,17 @@ export default function AuditLogs() {
     client.get('/exchange/certified-threats').then(({ data }) => setZkThreats(data.certified_threats || [])).catch(() => {})
   }
 
-  const loadAuditLogs = useCallback(() => {
-    setLoading(true)
+  const loadAuditLogs = useCallback((isQuiet = false) => {
+    if (!isQuiet) setLoading(true)
     const params = { limit: 100 }
     if (actionFilter) params.action = actionFilter
 
     client
       .get('/audit-logs', { params })
       .then(({ data }) => setLogs(data))
-      .finally(() => setLoading(false))
+      .finally(() => {
+        if (!isQuiet) setLoading(false)
+      })
 
     loadSBOMAndExchange()
   }, [actionFilter])
@@ -147,6 +149,10 @@ export default function AuditLogs() {
 
   useEffect(() => {
     loadAuditLogs()
+    const interval = setInterval(() => {
+      loadAuditLogs(true)
+    }, 5000)
+    return () => clearInterval(interval)
   }, [loadAuditLogs])
 
   const handleSearchSSE = async (e) => {

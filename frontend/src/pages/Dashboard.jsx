@@ -106,18 +106,24 @@ export default function Dashboard() {
 
 
   useEffect(() => {
-    client
-      .get('/dashboard/stats')
-      .then(({ data }) => setStats(data))
-      .catch(() => setError('Failed to load dashboard stats'))
-      .finally(() => setLoading(false))
+    const fetchAllDashboardData = () => {
+      client
+        .get('/dashboard/stats')
+        .then(({ data }) => setStats(data))
+        .catch(() => setError('Failed to load dashboard stats'))
+        .finally(() => setLoading(false))
 
-    client
-      .get('/federation/status')
-      .then(({ data }) => setFederationStatus(data))
-      .catch(() => {})
+      client
+        .get('/federation/status')
+        .then(({ data }) => setFederationStatus(data))
+        .catch(() => {})
 
-    loadV5AndV6Data()
+      loadV5AndV6Data()
+    }
+
+    fetchAllDashboardData()
+    const interval = setInterval(fetchAllDashboardData, 5000)
+    return () => clearInterval(interval)
   }, [])
 
   const handleRunAutonomousHunt = async () => {

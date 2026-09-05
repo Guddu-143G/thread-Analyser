@@ -102,6 +102,11 @@ python backend/tests/run_all_tests.py
 
 Or run individual unit test suites:
 ```powershell
+python backend/tests/unit/test_v26_modules.py
+python backend/tests/unit/test_v25_modules.py
+python backend/tests/unit/test_v24_modules.py
+python backend/tests/unit/test_v23_modules.py
+python backend/tests/unit/test_v21_modules.py
 python backend/tests/unit/test_v20_modules.py
 python backend/tests/unit/test_v19_modules.py
 python backend/tests/unit/test_v18_modules.py
@@ -116,6 +121,11 @@ python -m unittest backend/tests/unit/test_v7_all.py
 
 ### End-to-End & Feature Tests (Requires Live Backend on port 8000)
 ```powershell
+python backend/tests/e2e/test_v26_causal_soar.py
+python backend/tests/e2e/test_v25_cognitive_matrix.py
+python backend/tests/e2e/test_v24_baseband_ledger.py
+python backend/tests/e2e/test_v23_spatial_ledger.py
+python backend/tests/e2e/test_v21_mobile_forensics.py
 python backend/tests/e2e/test_v20_edge_mesh.py
 python backend/tests/e2e/test_v19_fleet_control.py
 python backend/tests/e2e/test_v18_live_response.py

@@ -99,6 +99,27 @@ class MLAnomalyDetector:
         self.anomaly_threshold = anomaly_threshold
         self._org_models: Dict[str, Any] = {}
 
+    def fit_org_model(self, org_id: str, events: List[Dict[str, Any]]) -> Any:
+        """Fits an Isolation Forest baseline model for a tenant."""
+        if not SKLEARN_AVAILABLE or not events:
+            return None
+        feature_matrix = [extract_event_features(e) for e in events]
+        data = np.array([
+            [
+                f["entropy"], f["text_len"], f["hour_sin"], f["hour_cos"],
+                f["is_base64"], f["has_script_eval"], f["is_suspicious_port"]
+            ]
+            for f in feature_matrix
+        ])
+        model = IsolationForest(
+            n_estimators=50,
+            contamination=self.contamination,
+            random_state=42
+        )
+        model.fit(data)
+        self._org_models[org_id] = model
+        return model
+
     def score(self, org_id: str, events: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         if not events:
             return []
@@ -192,3 +213,7 @@ class MLAnomalyDetector:
                 })
 
         return findings
+
+
+ml_detector = MLAnomalyDetector()
+

@@ -29,13 +29,16 @@ export function AuthProvider({ children }) {
   }, [loadUser])
 
   const login = async (email, password) => {
-    const { data } = await client.post('/auth/login', { email, password })
+    const cleanEmail = (email || '').trim().toLowerCase()
+    const { data } = await client.post('/auth/login', { email: cleanEmail, password })
     localStorage.setItem('ta_token', data.access_token)
     await loadUser()
   }
 
   const register = async (org_name, email, password) => {
-    const { data } = await client.post('/auth/register', { org_name, email, password })
+    const cleanEmail = (email || '').trim().toLowerCase()
+    const cleanOrg = (org_name || '').trim()
+    const { data } = await client.post('/auth/register', { org_name: cleanOrg, email: cleanEmail, password })
     localStorage.setItem('ta_token', data.access_token)
     await loadUser()
   }

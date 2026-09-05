@@ -26,6 +26,8 @@ export default function TPMAttestation() {
 
   useEffect(() => {
     loadData()
+    const interval = setInterval(loadData, 4000)
+    return () => clearInterval(interval)
   }, [])
 
   const handleSignSampleBlock = async () => {

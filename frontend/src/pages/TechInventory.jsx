@@ -17,6 +17,8 @@ export default function TechInventory() {
 
   useEffect(() => {
     loadInventory()
+    const interval = setInterval(loadInventory, 4000)
+    return () => clearInterval(interval)
   }, [])
 
   const handleDeployTargetedDecoy = async (tech, hostname) => {
