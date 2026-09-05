@@ -3,6 +3,9 @@
 An enterprise-grade, multi-tenant Software-as-a-Service (SaaS) platform engineered to detect, analyze, and mitigate security threats across user devices and organizational networks. It enables teams to ingest security telemetry, match events against threat intelligence (IOCs), evaluate patterns against configurable detection rules, and triage active alerts from a single dark-themed console.
 
 ---
+the website promo image :
+<img width="1919" height="907" alt="image" src="https://github.com/user-attachments/assets/d73296d5-b8fe-433e-b55a-67ae7385355e" />
+
 
 ## 🏗️ Platform Stack & System Architecture
 
@@ -18,7 +21,9 @@ Threat Analyser is designed to handle high-throughput log ingestion asynchronous
 ### High-Level Architectural Flow
 The diagram below maps the dynamic flow of telemetry from edge client devices, through the FastAPI and Redis ingestion buffer, into the Celery parsing worker clusters, and up to the live SOC analyst dashboard. For the comprehensive, deep-dive system architecture specification spanning v1.0 through v30.0, refer to **[System Architecture Guide (architecture.md)](./architecture.md)**.
 
-![Threat Analyser System Architecture](threat-analyser-architecture.png)
+![Threat Analyser System Architecture]
+<img width="1693" height="929" alt="image" src="https://github.com/user-attachments/assets/d4fee18a-feef-4c08-96ab-e0ca864e6ebb" />
+
 
 ---
 
@@ -26,7 +31,9 @@ The diagram below maps the dynamic flow of telemetry from edge client devices, t
 
 The threat detection pipeline processes telemetry through an asynchronous, 11-stage event processing fabric to guarantee that security incidents are normalized, evaluated, triaged, and mitigated within milliseconds of ingestion. For the full phase-by-phase technical walkthrough, mathematical formulas, and latency benchmarks, refer to **[Detection Pipeline Flow (detection-pipeline-flow.md)](./detection-pipeline-flow.md)**.
 
-![Detection Pipeline Flow](detection-pipeline-flow.png)
+![Detection Pipeline Flow]
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/888c5ad7-826c-4efd-8ff2-4e0be112e0d5" />
+
 
 1. **Ingest (Payload Receipt)**: Logs are submitted via authenticated file uploads (`POST /api/ingest/upload`) or via a lightweight device agent push (`POST /api/ingest/push` with the `X-API-Key` header). The API endpoint validates headers, enqueues the payload to Redis, and instantly returns an HTTP `202 Accepted` response.
 2. **Parse & Normalize**: Asynchronous Celery tasks process raw logs (supporting JSON, Common Event Format [CEF], key-value structures, and classic free-text syslog). The engine normalizes properties into a high-fidelity **Open Cybersecurity Schema Framework (OCSF)** event envelope (capturing `src_ip`, `dst_ip`, `user`, `process`, and `event_type`).
