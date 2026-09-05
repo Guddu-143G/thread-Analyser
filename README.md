@@ -16,7 +16,7 @@ Threat Analyser is designed to handle high-throughput log ingestion asynchronous
 * **Local Orchestration**: `Docker Compose` bundling Postgres, Redis, API Nodes, Celery Workers, Celery Beat, and the Nginx Frontend.
 
 ### High-Level Architectural Flow
-The diagram below maps the dynamic flow of telemetry from edge client devices, through the FastAPI and Redis ingestion buffer, into the Celery parsing worker clusters, and up to the live SOC analyst dashboard:
+The diagram below maps the dynamic flow of telemetry from edge client devices, through the FastAPI and Redis ingestion buffer, into the Celery parsing worker clusters, and up to the live SOC analyst dashboard. For the comprehensive, deep-dive system architecture specification spanning v1.0 through v30.0, refer to **[System Architecture Guide (architecture.md)](./architecture.md)**.
 
 ![Threat Analyser System Architecture](threat-analyser-architecture.png)
 
@@ -24,7 +24,7 @@ The diagram below maps the dynamic flow of telemetry from edge client devices, t
 
 ## ⚡ How Ingest & Detection Works
 
-The threat detection pipeline processes telemetry through six critical phases to guarantee that security incidents are normalized, evaluated, and triaged within milliseconds of ingestion:
+The threat detection pipeline processes telemetry through an asynchronous, 11-stage event processing fabric to guarantee that security incidents are normalized, evaluated, triaged, and mitigated within milliseconds of ingestion. For the full phase-by-phase technical walkthrough, mathematical formulas, and latency benchmarks, refer to **[Detection Pipeline Flow (detection-pipeline-flow.md)](./detection-pipeline-flow.md)**.
 
 ![Detection Pipeline Flow](detection-pipeline-flow.png)
 
