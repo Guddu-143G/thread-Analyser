@@ -20,14 +20,16 @@ app = FastAPI(title=settings.APP_NAME, version="30.0.0")
 
 
 
-origins = ["*"] if settings.CORS_ORIGINS == "*" else settings.CORS_ORIGINS.split(",")
+cors_origins = [o.strip() for o in settings.CORS_ORIGINS.split(",") if o.strip()]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=cors_origins if "*" not in cors_origins else ["*"],
+    allow_origin_regex=r"https://.*\.vercel\.app|https://.*\.app|http://localhost.*|http://127\.0\.0\.1.*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 app.include_router(auth.router)
 app.include_router(devices.router)
@@ -93,28 +95,40 @@ app.include_router(ws_cyber_range.router)
 
 @app.on_event("startup")
 async def on_startup():
-    Base.metadata.create_all(bind=engine)
-    # Start Real-Time Redis Pub/Sub Broadcaster in background
-    import asyncio
-    asyncio.create_task(ws.redis_event_broadcaster(settings.REDIS_URL))
-    # Safe incremental schema upgrades for existing postgres volume
-    with engine.connect() as conn:
-        conn.execute(
-            Base.metadata.tables["organizations"].select().limit(0)
-        )
-        statements = [
-            "ALTER TABLE tenant_technology_inventory ADD COLUMN IF NOT EXISTS runtime VARCHAR;",
-            "ALTER TABLE tenant_technology_inventory ADD COLUMN IF NOT EXISTS category VARCHAR;",
-            "ALTER TABLE tenant_technology_inventory ADD COLUMN IF NOT EXISTS environment VARCHAR DEFAULT 'production';",
-            "ALTER TABLE tenant_technology_inventory ADD COLUMN IF NOT EXISTS path VARCHAR;"
-        ]
-        for stmt in statements:
-            try:
-                from sqlalchemy import text
-                conn.execute(text(stmt))
-                conn.commit()
-            except Exception:
-                pass
+    try:
+        Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        print(f"[Startup Warning] Base.metadata.create_all failed: {e}")
+
+    # Start Real-Time Redis Pub/Sub Broadcaster in background (if Redis reachable)
+    try:
+        import asyncio
+        asyncio.create_task(ws.redis_event_broadcaster(settings.REDIS_URL))
+    except Exception as e:
+        print(f"[Startup Warning] Redis broadcaster not initialized: {e}")
+
+    # Safe incremental schema upgrades for existing volume
+    try:
+        with engine.connect() as conn:
+            conn.execute(
+                Base.metadata.tables["organizations"].select().limit(0)
+            )
+            statements = [
+                "ALTER TABLE tenant_technology_inventory ADD COLUMN IF NOT EXISTS runtime VARCHAR;",
+                "ALTER TABLE tenant_technology_inventory ADD COLUMN IF NOT EXISTS category VARCHAR;",
+                "ALTER TABLE tenant_technology_inventory ADD COLUMN IF NOT EXISTS environment VARCHAR DEFAULT 'production';",
+                "ALTER TABLE tenant_technology_inventory ADD COLUMN IF NOT EXISTS path VARCHAR;"
+            ]
+            for stmt in statements:
+                try:
+                    from sqlalchemy import text
+                    conn.execute(text(stmt))
+                    conn.commit()
+                except Exception:
+                    pass
+    except Exception as e:
+        print(f"[Startup Warning] Schema verification skipped: {e}")
+
 
 
 @app.get("/api/health")
