@@ -1,6 +1,6 @@
-# Threat Analyser - Operations & Running Guide
+# CyberTrace - Operations & Running Guide
 
-This guide provides instructions for starting, developing, testing, and simulating threats on the Threat Analyser multi-tenant SaaS security platform.
+This guide provides instructions for starting, developing, testing, and simulating threats on the CyberTrace multi-tenant SaaS security platform.
 
 ---
 

@@ -1,4 +1,4 @@
-# 🛡️ Threat Analyser
+# 🛡️ CyberTrace
 
 An enterprise-grade, multi-tenant Software-as-a-Service (SaaS) platform engineered to detect, analyze, and mitigate security threats across user devices and organizational networks. It enables teams to ingest security telemetry, match events against threat intelligence (IOCs), evaluate patterns against configurable detection rules, and triage active alerts from a single dark-themed console.
 
@@ -9,7 +9,7 @@ the website promo image :
 
 ## 🏗️ Platform Stack & System Architecture
 
-Threat Analyser is designed to handle high-throughput log ingestion asynchronously. The HTTP ingestion path is decoupled from the resource-heavy parsing and matching pipelines, ensuring that client applications or forwarders never block.
+CyberTrace is designed to handle high-throughput log ingestion asynchronously. The HTTP ingestion path is decoupled from the resource-heavy parsing and matching pipelines, ensuring that client applications or forwarders never block.
 
 ### Modern Technical Stack
 * **Backend Framework**: `FastAPI` (Python 3.11) utilizing asynchronous concurrent endpoints.
@@ -21,9 +21,8 @@ Threat Analyser is designed to handle high-throughput log ingestion asynchronous
 ### High-Level Architectural Flow
 The diagram below maps the dynamic flow of telemetry from edge client devices, through the FastAPI and Redis ingestion buffer, into the Celery parsing worker clusters, and up to the live SOC analyst dashboard. For the comprehensive, deep-dive system architecture specification spanning v1.0 through v30.0, refer to **[System Architecture Guide (architecture.md)](./architecture.md)**.
 
-![Threat Analyser System Architecture]
+![CyberTrace System Architecture]
 <img width="1693" height="929" alt="image" src="https://github.com/user-attachments/assets/d4fee18a-feef-4c08-96ab-e0ca864e6ebb" />
-
 
 ---
 
@@ -46,7 +45,7 @@ The threat detection pipeline processes telemetry through an asynchronous, 11-st
 
 ## 🔒 Multi-Tenancy & Security Hardening
 
-Security and strict isolation are at the core of Threat Analyser's multi-tenant architecture:
+Security and strict isolation are at the core of CyberTrace's multi-tenant architecture:
 
 * **Symmetric Tenant Isolation**: Every query and database record is strictly scoped and isolated by a unique `org_id`. Pre-seeded out-of-the-box assets (built-in rules, global threat indicators) use `org_id = NULL`—allowing tenant viewers to read but preventing them from modifying or deleting shared global structures.
 * **Cryptographic Credential Safeguards**: User passwords are encrypted with industry-standard `bcrypt`. Device credentials and agent keys are generated as random high-entropy tokens and stored as strong SHA-256 hashes (the plaintext secret is displayed exactly once upon creation).
@@ -61,7 +60,7 @@ Security and strict isolation are at the core of Threat Analyser's multi-tenant 
 
 ## 🛠️ Extending the Platform
 
-Threat Analyser's modular design is built to grow alongside your infrastructure's security requirements:
+CyberTrace's modular design is built to grow alongside your infrastructure's security requirements:
 
 * **Incorporate Machine Learning**: Implement your custom anomaly scoring model directly inside the modular `AnomalyDetector.score()` interface in `app/detection/anomaly.py`—the ingestion pipeline is pre-configured to evaluate and store its outputs.
 * **Add Custom Log Parsers**: Extend the core parser class to support proprietary, vendor-specific network device formats or custom application logs by defining new regular expression sets.

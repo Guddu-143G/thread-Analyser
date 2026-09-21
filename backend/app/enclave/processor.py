@@ -52,7 +52,7 @@ class EnclaveLogProcessor:
             return {
                 "metadata": {
                     "version": "1.1.0",
-                    "product": "Threat Analyser Enclave Worker",
+                    "product": "CyberTrace Enclave Worker",
                     "tenant_id": self.tenant_id,
                     "confidential_computing": self.enclave_mode,
                     "mrenclave": self.enclave_attestation_mrenclave,

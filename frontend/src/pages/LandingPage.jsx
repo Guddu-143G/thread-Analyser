@@ -133,7 +133,7 @@ const OCSF_PRESETS = [
       src_endpoint: { ip: "192.168.1.152", port: 50122 },
       auth_protocol: "SSH",
       status: "Failure",
-      metadata: { version: "1.1.0", product: "Threat Analyser OCSF Normalizer" }
+      metadata: { version: "1.1.0", product: "CyberTrace OCSF Normalizer" }
     }
   },
   {
@@ -149,7 +149,7 @@ const OCSF_PRESETS = [
       activity_name: "Process Launch",
       device: { hostname: "fin-ws-04" },
       process: { name: "powershell.exe", cmd_line: "powershell.exe -EncodedCommand SQBFAFgAK..." },
-      metadata: { version: "1.1.0", product: "Threat Analyser OCSF Normalizer" }
+      metadata: { version: "1.1.0", product: "CyberTrace OCSF Normalizer" }
     }
   },
   {
@@ -165,7 +165,7 @@ const OCSF_PRESETS = [
       src_endpoint: { ip: "10.0.1.45", port: 54122 },
       dest_endpoint: { ip: "185.220.101.5", port: 4444 },
       network_activity: { protocol: "TCP", dest_port: 4444 },
-      metadata: { version: "1.1.0", product: "Threat Analyser OCSF Normalizer" }
+      metadata: { version: "1.1.0", product: "CyberTrace OCSF Normalizer" }
     }
   }
 ]
@@ -273,7 +273,7 @@ export default function LandingPage() {
     if (bootSequence === 'DONE') return
 
     const steps = [
-      { text: "[ 0.00s ] Initializing Threat Analyser Secure Ingress Node...", delay: 200 },
+      { text: "[ 0.00s ] Initializing CyberTrace Secure Ingress Node...", delay: 200 },
       { text: "[ 0.40s ] Decrypting tenant isolation key rings (RSA-4096 / TLS 1.3)...", delay: 600 },
       { text: "[ 0.80s ] Loading OCSF v1.1.0 semantic normalization engine...", delay: 1000 },
       { text: "[ 1.15s ] Launching unsupervised ML Isolation Forest & entropy models...", delay: 1400 },
@@ -367,7 +367,7 @@ export default function LandingPage() {
         <div className="flex justify-between items-center max-w-4xl mx-auto w-full">
           <div className="flex items-center gap-2 text-accent">
             <span className="animate-spin text-lg">◈</span>
-            <span className="text-xs font-bold tracking-widest uppercase">Threat Analyser System Boot</span>
+            <span className="text-xs font-bold tracking-widest uppercase">CyberTrace System Boot</span>
           </div>
           <button
             onClick={skipBoot}
@@ -407,7 +407,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-3">
             <span className="text-accent text-2xl font-mono font-bold">◆</span>
             <div>
-              <span className="font-mono font-bold text-slate-100 tracking-wider text-base block">THREAT ANALYSER</span>
+              <span className="font-mono font-bold text-slate-100 tracking-wider text-base block">CyberTrace</span>
               <span className="text-[10px] text-accent font-mono tracking-widest uppercase block -mt-1">Enterprise SIEM v2</span>
             </div>
           </div>
@@ -567,11 +567,10 @@ export default function LandingPage() {
               <button
                 key={key}
                 onClick={() => runSimulation(key)}
-                className={`p-3 rounded-lg border text-left transition-all duration-300 ${
-                  selectedKey === key
+                className={`p-3 rounded-lg border text-left transition-all duration-300 ${selectedKey === key
                     ? 'bg-accent/15 border-accent shadow-[0_0_15px_rgba(0,212,160,0.2)]'
                     : 'bg-[#151f32] border-slate-800 hover:border-slate-700'
-                }`}
+                  }`}
               >
                 <div className="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Attack Vector</div>
                 <div className="text-xs font-bold mt-1 text-slate-200 truncate">{data.name}</div>
@@ -679,14 +678,12 @@ export default function LandingPage() {
                     <div className="text-xs max-w-xs">Run an attack vector above to observe live state transformations and triage generation.</div>
                   </div>
                 ) : (
-                  <div className={`border rounded-lg p-4 space-y-3 min-h-[280px] animate-fade-in ${
-                    scenario.ocsf.severity_id >= 4 ? 'border-rose-500/40 bg-rose-950/15' : 'border-amber-500/40 bg-amber-950/15'
-                  }`}>
+                  <div className={`border rounded-lg p-4 space-y-3 min-h-[280px] animate-fade-in ${scenario.ocsf.severity_id >= 4 ? 'border-rose-500/40 bg-rose-950/15' : 'border-amber-500/40 bg-amber-950/15'
+                    }`}>
                     <div className="flex justify-between items-start">
                       <div>
-                        <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded font-mono ${
-                          scenario.ocsf.severity_id >= 4 ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                        }`}>
+                        <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded font-mono ${scenario.ocsf.severity_id >= 4 ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                          }`}>
                           {scenario.ocsf.severity_id >= 4 ? 'CRITICAL INCIDENT' : 'HIGH INCIDENT'}
                         </span>
                         <h4 className="font-bold text-base text-slate-100 mt-2">{scenario.name}</h4>
@@ -739,7 +736,7 @@ export default function LandingPage() {
             Real-Time Engine Deep Dive
           </div>
           <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-100">
-            Threat Analyser Detection Core
+            CyberTrace Detection Core
           </h2>
           <p className="text-slate-400 max-w-2xl mx-auto text-sm">
             Inspect how our four core detection sub-engines normalize, compile, evaluate, and score telemetry in sub-millisecond execution loops.
@@ -750,73 +747,64 @@ export default function LandingPage() {
         <div className="flex flex-wrap justify-center gap-2 p-1.5 bg-base-900 border border-base-700 rounded-xl max-w-3xl mx-auto font-mono text-xs">
           <button
             onClick={() => setActiveCoreTab("ocsf")}
-            className={`px-4 py-2 rounded-lg transition-all ${
-              activeCoreTab === "ocsf" ? "bg-accent text-base-950 font-bold shadow-md" : "text-slate-400 hover:text-slate-200"
-            }`}
+            className={`px-4 py-2 rounded-lg transition-all ${activeCoreTab === "ocsf" ? "bg-accent text-base-950 font-bold shadow-md" : "text-slate-400 hover:text-slate-200"
+              }`}
           >
             1. OCSF Normalizer
           </button>
           <button
             onClick={() => setActiveCoreTab("sigma")}
-            className={`px-4 py-2 rounded-lg transition-all ${
-              activeCoreTab === "sigma" ? "bg-accent text-base-950 font-bold shadow-md" : "text-slate-400 hover:text-slate-200"
-            }`}
+            className={`px-4 py-2 rounded-lg transition-all ${activeCoreTab === "sigma" ? "bg-accent text-base-950 font-bold shadow-md" : "text-slate-400 hover:text-slate-200"
+              }`}
           >
             2. Sigma Rule Compiler
           </button>
           <button
             onClick={() => setActiveCoreTab("ml")}
-            className={`px-4 py-2 rounded-lg transition-all ${
-              activeCoreTab === "ml" ? "bg-accent text-base-950 font-bold shadow-md" : "text-slate-400 hover:text-slate-200"
-            }`}
+            className={`px-4 py-2 rounded-lg transition-all ${activeCoreTab === "ml" ? "bg-accent text-base-950 font-bold shadow-md" : "text-slate-400 hover:text-slate-200"
+              }`}
           >
             3. ML Shannon Entropy
           </button>
           <button
             onClick={() => setActiveCoreTab("ioc")}
-            className={`px-4 py-2 rounded-lg transition-all ${
-              activeCoreTab === "ioc" ? "bg-accent text-base-950 font-bold shadow-md" : "text-slate-400 hover:text-slate-200"
-            }`}
+            className={`px-4 py-2 rounded-lg transition-all ${activeCoreTab === "ioc" ? "bg-accent text-base-950 font-bold shadow-md" : "text-slate-400 hover:text-slate-200"
+              }`}
           >
             4. Threat Intel (IOC)
           </button>
           <button
             onClick={() => setActiveCoreTab("kms")}
-            className={`px-4 py-2 rounded-lg transition-all ${
-              activeCoreTab === "kms" ? "bg-accent text-base-950 font-bold shadow-md" : "text-slate-400 hover:text-slate-200"
-            }`}
+            className={`px-4 py-2 rounded-lg transition-all ${activeCoreTab === "kms" ? "bg-accent text-base-950 font-bold shadow-md" : "text-slate-400 hover:text-slate-200"
+              }`}
           >
             5. Zero-Trust KMS &amp; Ledger
           </button>
           <button
             onClick={() => setActiveCoreTab("v4")}
-            className={`px-4 py-2 rounded-lg transition-all ${
-              activeCoreTab === "v4" ? "bg-accent text-base-950 font-bold shadow-md" : "text-slate-400 hover:text-slate-200"
-            }`}
+            className={`px-4 py-2 rounded-lg transition-all ${activeCoreTab === "v4" ? "bg-accent text-base-950 font-bold shadow-md" : "text-slate-400 hover:text-slate-200"
+              }`}
           >
             6. eBPF &amp; Federated ML (v4)
           </button>
           <button
             onClick={() => setActiveCoreTab("v5")}
-            className={`px-4 py-2 rounded-lg transition-all ${
-              activeCoreTab === "v5" ? "bg-accent text-base-950 font-bold shadow-md" : "text-slate-400 hover:text-slate-200"
-            }`}
+            className={`px-4 py-2 rounded-lg transition-all ${activeCoreTab === "v5" ? "bg-accent text-base-950 font-bold shadow-md" : "text-slate-400 hover:text-slate-200"
+              }`}
           >
             7. Enclave &amp; Deception (v5)
           </button>
           <button
             onClick={() => setActiveCoreTab("v6")}
-            className={`px-4 py-2 rounded-lg transition-all ${
-              activeCoreTab === "v6" ? "bg-accent text-base-950 font-bold shadow-md" : "text-slate-400 hover:text-slate-200"
-            }`}
+            className={`px-4 py-2 rounded-lg transition-all ${activeCoreTab === "v6" ? "bg-accent text-base-950 font-bold shadow-md" : "text-slate-400 hover:text-slate-200"
+              }`}
           >
             8. FHE &amp; Autonomous AI (v6)
           </button>
           <button
             onClick={() => setActiveCoreTab("v7")}
-            className={`px-4 py-2 rounded-lg transition-all ${
-              activeCoreTab === "v7" ? "bg-accent text-base-950 font-bold shadow-md" : "text-slate-400 hover:text-slate-200"
-            }`}
+            className={`px-4 py-2 rounded-lg transition-all ${activeCoreTab === "v7" ? "bg-accent text-base-950 font-bold shadow-md" : "text-slate-400 hover:text-slate-200"
+              }`}
           >
             9. PQC &amp; Threat Twin (v7)
           </button>
@@ -844,11 +832,10 @@ export default function LandingPage() {
                     <button
                       key={idx}
                       onClick={() => setSelectedOcsfPreset(idx)}
-                      className={`text-xs px-3 py-1.5 rounded font-mono border ${
-                        selectedOcsfPreset === idx
+                      className={`text-xs px-3 py-1.5 rounded font-mono border ${selectedOcsfPreset === idx
                           ? "bg-accent/15 text-accent border-accent font-semibold"
                           : "bg-base-950 text-slate-400 border-base-800 hover:border-slate-700"
-                      }`}
+                        }`}
                     >
                       {p.title.split(' ')[0]}
                     </button>
@@ -896,11 +883,10 @@ export default function LandingPage() {
                     <button
                       key={idx}
                       onClick={() => setSelectedSigmaPreset(idx)}
-                      className={`text-xs px-3 py-1.5 rounded font-mono border ${
-                        selectedSigmaPreset === idx
+                      className={`text-xs px-3 py-1.5 rounded font-mono border ${selectedSigmaPreset === idx
                           ? "bg-amber-500/15 text-amber-300 border-amber-500 font-semibold"
                           : "bg-base-950 text-slate-400 border-base-800 hover:border-slate-700"
-                      }`}
+                        }`}
                     >
                       {p.title.split(' ')[0]}
                     </button>
@@ -1045,14 +1031,12 @@ export default function LandingPage() {
                 </div>
 
                 {iocLookupResult && (
-                  <div className={`p-4 rounded-lg border font-mono text-xs space-y-2 ${
-                    iocLookupResult.matched ? "bg-rose-950/20 border-rose-600/60" : "bg-emerald-950/20 border-emerald-600/60"
-                  }`}>
+                  <div className={`p-4 rounded-lg border font-mono text-xs space-y-2 ${iocLookupResult.matched ? "bg-rose-950/20 border-rose-600/60" : "bg-emerald-950/20 border-emerald-600/60"
+                    }`}>
                     <div className="flex justify-between items-center">
                       <span className="font-bold text-sm text-slate-200">Indicator: {iocLookupResult.key}</span>
-                      <span className={`px-2 py-0.5 rounded font-bold text-[10px] ${
-                        iocLookupResult.matched ? "bg-rose-500/20 text-rose-300 border border-rose-500/40" : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
-                      }`}>
+                      <span className={`px-2 py-0.5 rounded font-bold text-[10px] ${iocLookupResult.matched ? "bg-rose-500/20 text-rose-300 border border-rose-500/40" : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                        }`}>
                         {iocLookupResult.severity}
                       </span>
                     </div>
@@ -1140,11 +1124,10 @@ export default function LandingPage() {
                       </div>
                     </div>
 
-                    <div className={`p-2.5 rounded border text-[11px] ${
-                      kmsTargetOrg === kmsDecryptAttemptOrg
+                    <div className={`p-2.5 rounded border text-[11px] ${kmsTargetOrg === kmsDecryptAttemptOrg
                         ? "bg-emerald-950/60 border-emerald-700 text-emerald-300"
                         : "bg-rose-950/80 border-rose-600 text-rose-300 font-bold"
-                    }`}>
+                      }`}>
                       {kmsTargetOrg === kmsDecryptAttemptOrg ? (
                         <div>✔ DECRYPT SUCCESS: {kmsPayload}</div>
                       ) : (
@@ -1165,11 +1148,10 @@ export default function LandingPage() {
                     <span className="text-slate-400">Sequential Audit Blocks:</span>
                     <button
                       onClick={() => setKmsTamperBlockIndex(kmsTamperBlockIndex === 1 ? null : 1)}
-                      className={`px-2 py-0.5 rounded border text-[10px] ${
-                        kmsTamperBlockIndex === 1
+                      className={`px-2 py-0.5 rounded border text-[10px] ${kmsTamperBlockIndex === 1
                           ? "bg-rose-950 text-rose-300 border-rose-700"
                           : "bg-amber-950 text-amber-300 border-amber-700"
-                      }`}
+                        }`}
                     >
                       {kmsTamperBlockIndex === 1 ? "Undo Tampering" : "⚡ Inject Tampered Row"}
                     </button>
@@ -1183,11 +1165,10 @@ export default function LandingPage() {
                     ].map((b) => (
                       <div
                         key={b.index}
-                        className={`p-2 rounded border text-[11px] ${
-                          kmsTamperBlockIndex === 1 && b.index >= 1
+                        className={`p-2 rounded border text-[11px] ${kmsTamperBlockIndex === 1 && b.index >= 1
                             ? "bg-rose-950/40 border-rose-700 text-rose-300"
                             : "bg-base-900 border-base-800 text-slate-300"
-                        }`}
+                          }`}
                       >
                         <div className="flex justify-between text-[10px] text-slate-400 mb-0.5">
                           <span>Block #{b.index} • Action: <strong className="text-slate-200">{b.action}</strong></span>
@@ -1200,11 +1181,10 @@ export default function LandingPage() {
                     ))}
                   </div>
 
-                  <div className={`p-2.5 rounded border text-[11px] ${
-                    kmsTamperBlockIndex === 1
+                  <div className={`p-2.5 rounded border text-[11px] ${kmsTamperBlockIndex === 1
                       ? "bg-rose-950/80 border-rose-600 text-rose-300 font-bold"
                       : "bg-emerald-950/60 border-emerald-700 text-emerald-300"
-                  }`}>
+                    }`}>
                     {kmsTamperBlockIndex === 1 ? (
                       <div>❌ TAMPERING DETECTED: Hash chain broken at Block #1. Expected cryptographic seal mismatch.</div>
                     ) : (
@@ -1240,7 +1220,7 @@ export default function LandingPage() {
                     Sandboxed Rust/Aya in-kernel probes intercept syscalls at ring 0, eliminating user-space log tampering.
                   </p>
                   <pre className="bg-base-900 border border-base-800 rounded p-3 text-[11px] text-cyan-300 overflow-x-auto">
-{`[KERNEL:sys_enter_execve] PID: 4892 UID: 0 (root)
+                    {`[KERNEL:sys_enter_execve] PID: 4892 UID: 0 (root)
   -> Binary: /usr/bin/python3
   -> In-Memory RingBuffer: Zero-copy lockless queue
   -> Output: OCSF Class UID: 1007 (Process Activity)`}
@@ -1288,7 +1268,7 @@ export default function LandingPage() {
                     Dynamically generates context-aware containment playbooks based on MITRE progression and historical actions.
                   </p>
                   <pre className="bg-base-900 border border-base-800 rounded p-2.5 text-[10px] text-emerald-400 overflow-x-auto">
-{`{
+                    {`{
   "engine": "Threat-Reasoner-v4-Cognitive",
   "risk_mitigation_score": 0.96,
   "orchestrated_actions": [
@@ -1628,7 +1608,7 @@ export default function LandingPage() {
             1-Click Quickstart
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-100">
-            Deploy Threat Analyser in 60 Seconds
+            Deploy CyberTrace in 60 Seconds
           </h2>
           <p className="text-slate-400 text-sm max-w-xl mx-auto">
             Spin up the complete containerized stack (FastAPI Backend, Celery Workers, Redis, PostgreSQL, and React Console) using Docker Compose.
@@ -1645,7 +1625,7 @@ export default function LandingPage() {
               </button>
             </div>
             <pre className="text-emerald-400">
-{`# 1. Clone the repository
+              {`# 1. Clone the repository
 git clone https://github.com/threat-analyser/threat-analyser.git
 cd threat-analyser
 
@@ -1664,7 +1644,7 @@ http://localhost`}
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <span className="text-accent">◆</span>
-            <span className="text-slate-300 font-bold">Threat Analyser SIEM</span>
+            <span className="text-slate-300 font-bold">CyberTrace SIEM</span>
             <span>— Open Core Multi-Tenant Platform</span>
           </div>
 
@@ -1700,7 +1680,7 @@ http://localhost`}
             </p>
 
             <pre className="bg-base-950 border border-base-800 rounded p-3 text-xs text-emerald-400 font-mono overflow-x-auto">
-{`docker compose up --build -d`}
+              {`docker compose up --build -d`}
             </pre>
 
             <div className="text-xs space-y-1 text-slate-300 font-mono">

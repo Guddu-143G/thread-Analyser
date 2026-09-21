@@ -172,7 +172,7 @@ class SecurityResilienceReporter:
 
 ## 📊 Executive Threat Coverage Matrix
 
-The Threat Analyser Chaos Engine has completed automated safety evaluations across primary defect taxonomies using the active backend parsing engine and rule definitions.
+The CyberTrace Chaos Engine has completed automated safety evaluations across primary defect taxonomies using the active backend parsing engine and rule definitions.
 
 | Target Defect Variety | CWE Class | Severity | Latency | Alert Status |
 | :--- | :--- | :--- | :--- | :--- |

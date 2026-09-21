@@ -1,5 +1,5 @@
 """
-Threat Analyser - Version 21 Mobile USB Hotplug & HID Passcode Auditor Agent
+CyberTrace - Version 21 Mobile USB Hotplug & HID Passcode Auditor Agent
 Probes local host USB subsystem (udev/libusb/usbmuxd/ADB) and streams
 mobile hardware events to the central SaaS platform.
 """
@@ -44,7 +44,7 @@ def forward_discovery(server_url: str, token: str):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="V21 Physical Mobile USB Hotplug Probe")
-    parser.add_argument("--server", default="http://localhost:8000", help="Threat Analyser API server")
+    parser.add_argument("--server", default="http://localhost:8000", help="CyberTrace API server")
     parser.add_argument("--token", default="", help="JWT bearer token")
     args = parser.parse_args()
 

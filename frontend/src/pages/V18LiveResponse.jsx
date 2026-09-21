@@ -23,7 +23,7 @@ export default function V18LiveResponse() {
 
   // 3. Interactive Terminal
   const [terminalRows, setTerminalRows] = useState([
-    '[*] Initializing Threat Analyser Zero-Trust Live Response Mesh (v18.0)...',
+    '[*] Initializing CyberTrace Zero-Trust Live Response Mesh (v18.0)...',
     '[*] Establishing Outbound Reverse WSS connection tunnel (mTLS 1.3 TPM 2.0)...',
     '[*] Ready. Please select an enrolled target device or start a new Live Response session.'
   ])
@@ -359,13 +359,12 @@ export default function V18LiveResponse() {
       {/* Global Feedback Banner */}
       {feedback && (
         <div
-          className={`p-4 rounded-xl text-sm font-medium border flex items-center justify-between ${
-            feedback.type === 'error'
+          className={`p-4 rounded-xl text-sm font-medium border flex items-center justify-between ${feedback.type === 'error'
               ? 'bg-rose-500/10 text-rose-400 border-rose-500/30'
               : feedback.type === 'info'
-              ? 'bg-blue-500/10 text-blue-400 border-blue-500/30'
-              : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-          }`}
+                ? 'bg-blue-500/10 text-blue-400 border-blue-500/30'
+                : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+            }`}
         >
           <span>{feedback.msg}</span>
           <button onClick={() => setFeedback(null)} className="text-xs opacity-60 hover:opacity-100">
@@ -390,11 +389,10 @@ export default function V18LiveResponse() {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center space-x-2 px-4 py-2.5 rounded-lg text-xs font-medium transition whitespace-nowrap ${
-              activeTab === tab.id
+            className={`flex items-center space-x-2 px-4 py-2.5 rounded-lg text-xs font-medium transition whitespace-nowrap ${activeTab === tab.id
                 ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20 font-semibold'
                 : 'text-gray-400 hover:text-white hover:bg-gray-800/60'
-            }`}
+              }`}
           >
             <span>{tab.icon}</span>
             <span>{tab.label}</span>
@@ -509,13 +507,12 @@ export default function V18LiveResponse() {
                   </span>
                   {currentSession && (
                     <span
-                      className={`text-[10px] px-2 py-0.2 rounded font-bold ${
-                        currentSession.status === 'ACTIVE'
+                      className={`text-[10px] px-2 py-0.2 rounded font-bold ${currentSession.status === 'ACTIVE'
                           ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
                           : currentSession.status === 'PENDING_APPROVAL'
-                          ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
-                          : 'bg-rose-500/20 text-rose-400 border border-rose-500/40'
-                      }`}
+                            ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
+                            : 'bg-rose-500/20 text-rose-400 border border-rose-500/40'
+                        }`}
                     >
                       {currentSession.status}
                     </span>
@@ -526,9 +523,8 @@ export default function V18LiveResponse() {
               <div className="flex items-center space-x-3">
                 <button
                   onClick={() => setAutoScroll(!autoScroll)}
-                  className={`text-[10px] px-2 py-0.5 rounded border ${
-                    autoScroll ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30' : 'bg-gray-800 text-gray-400 border-gray-700'
-                  }`}
+                  className={`text-[10px] px-2 py-0.5 rounded border ${autoScroll ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30' : 'bg-gray-800 text-gray-400 border-gray-700'
+                    }`}
                 >
                   {autoScroll ? '⚡ Autoscroll: ON' : 'Autoscroll: OFF'}
                 </button>
@@ -550,17 +546,16 @@ export default function V18LiveResponse() {
               {terminalRows.map((row, idx) => (
                 <div
                   key={idx}
-                  className={`whitespace-pre-wrap leading-relaxed ${
-                    row.startsWith('[ERR]')
+                  className={`whitespace-pre-wrap leading-relaxed ${row.startsWith('[ERR]')
                       ? 'text-rose-400'
                       : row.startsWith('[!]')
-                      ? 'text-amber-400'
-                      : row.startsWith('[+]')
-                      ? 'text-cyan-300'
-                      : row.includes('$')
-                      ? 'text-white font-bold'
-                      : 'text-emerald-400'
-                  }`}
+                        ? 'text-amber-400'
+                        : row.startsWith('[+]')
+                          ? 'text-cyan-300'
+                          : row.includes('$')
+                            ? 'text-white font-bold'
+                            : 'text-emerald-400'
+                    }`}
                 >
                   {row}
                 </div>
@@ -584,10 +579,10 @@ export default function V18LiveResponse() {
                   !currentSession
                     ? 'Select or create a Live Response session above...'
                     : currentSession.status !== 'ACTIVE'
-                    ? `Session is ${currentSession.status}. Approve dual-authorization to enable shell...`
-                    : isExecuting
-                    ? 'Executing command across reverse tunnel...'
-                    : 'Type diagnostic/remediation command (e.g., ps aux, kill -9 <PID>, netstat -tlpn)...'
+                      ? `Session is ${currentSession.status}. Approve dual-authorization to enable shell...`
+                      : isExecuting
+                        ? 'Executing command across reverse tunnel...'
+                        : 'Type diagnostic/remediation command (e.g., ps aux, kill -9 <PID>, netstat -tlpn)...'
                 }
                 autoFocus
               />
@@ -688,13 +683,12 @@ export default function V18LiveResponse() {
                       </td>
                       <td className="py-3 px-4">
                         <span
-                          className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase font-mono ${
-                            s.status === 'ACTIVE'
+                          className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase font-mono ${s.status === 'ACTIVE'
                               ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
                               : s.status === 'PENDING_APPROVAL'
-                              ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
-                              : 'bg-gray-800 text-gray-400'
-                          }`}
+                                ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
+                                : 'bg-gray-800 text-gray-400'
+                            }`}
                         >
                           {s.status}
                         </span>
@@ -789,11 +783,10 @@ export default function V18LiveResponse() {
                       </td>
                       <td className="py-3 px-4">
                         <span
-                          className={`px-2 py-0.5 rounded text-[10px] font-bold font-mono ${
-                            cmd.exit_code === 0
+                          className={`px-2 py-0.5 rounded text-[10px] font-bold font-mono ${cmd.exit_code === 0
                               ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
                               : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                          }`}
+                            }`}
                         >
                           EXIT {cmd.exit_code}
                         </span>
@@ -843,16 +836,14 @@ export default function V18LiveResponse() {
                 keystrokesList.map((k) => (
                   <div
                     key={k.keystroke_id}
-                    className={`p-2 rounded border flex items-start space-x-3 ${
-                      k.direction === 'IN'
+                    className={`p-2 rounded border flex items-start space-x-3 ${k.direction === 'IN'
                         ? 'bg-cyan-950/40 border-cyan-800/40 text-cyan-200'
                         : 'bg-slate-950/80 border-slate-800 text-emerald-400'
-                    }`}
+                      }`}
                   >
                     <span
-                      className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
-                        k.direction === 'IN' ? 'bg-cyan-500/20 text-cyan-400' : 'bg-emerald-500/20 text-emerald-400'
-                      }`}
+                      className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${k.direction === 'IN' ? 'bg-cyan-500/20 text-cyan-400' : 'bg-emerald-500/20 text-emerald-400'
+                        }`}
                     >
                       {k.direction}
                     </span>

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Unified Test Runner for Threat Analyser Backend.
+Unified Test Runner for CyberTrace Backend.
 
 Executes all unit test modules in `backend/tests/unit/` and reports test summary.
 For live E2E tests in `backend/tests/e2e/`, ensure the FastAPI server is running on localhost:8000.
@@ -26,7 +26,7 @@ if str(BACKEND_DIR) not in sys.path:
 
 def run_unit_tests():
     print("=" * 70)
-    print("THREAT ANALYSER - EXECUTING UNIT TEST SUITE")
+    print("CyberTrace - EXECUTING UNIT TEST SUITE")
     print("=" * 70)
 
     unit_dir = Path(__file__).resolve().parent / "unit"

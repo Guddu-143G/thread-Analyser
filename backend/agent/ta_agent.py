@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Threat Analyser Log Forwarder Agent (TA-Agent).
+CyberTrace Log Forwarder Agent (TA-Agent).
 
 Conforms to agents.md specification:
 - Real-time log file tailing & journal collection
@@ -227,8 +227,8 @@ class TAAgent:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Threat Analyser Endpoint Log Forwarder Agent")
-    parser.add_argument("--server", default="http://localhost:8000", help="Threat Analyser API root URL")
+    parser = argparse.ArgumentParser(description="CyberTrace Endpoint Log Forwarder Agent")
+    parser.add_argument("--server", default="http://localhost:8000", help="CyberTrace API root URL")
     parser.add_argument("--api-key", required=True, help="Device API key")
     parser.add_argument("--watch", nargs="+", default=["/var/log/syslog", "/var/log/auth.log", "*.log"], help="Log file paths or glob patterns to watch")
     args = parser.parse_args()

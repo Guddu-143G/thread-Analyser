@@ -1,5 +1,5 @@
 // file: agent/ebpf/src/main.rs
-//! Threat Analyser eBPF In-Kernel Probe
+//! CyberTrace eBPF In-Kernel Probe
 //!
 //! Attaches non-bypassable tracepoints directly into kernel system calls:
 //! - `sys_enter_execve`: Captures binary path, arguments, PID, and UID at process birth.

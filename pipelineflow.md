@@ -1,4 +1,4 @@
-# ⚡ Threat Analyser: End-to-End Threat Detection Pipeline Flow
+# ⚡ CyberTrace: End-to-End Threat Detection Pipeline Flow
 
 **Document Focus:** Deep-Dive Technical Specification of the Ingestion, Normalization, Correlation, Machine Learning, and Autonomous SOAR Execution Pipeline  
 **Platform Version:** v1.0 – v30.0  
@@ -8,7 +8,7 @@
 
 ## 1. Pipeline Architectural Overview
 
-The Threat Analyser detection pipeline is an asynchronous, multi-stage event processing fabric. It transforms raw, heterogeneous edge logs into normalized **Open Cybersecurity Schema Framework (OCSF v1.2)** events, matches them against global and private threat intelligence, evaluates Sigma and stateful threshold rules, computes multi-dimensional machine learning anomaly scores, traces causal attack graphs to Patient Zero, and executes TPM 2.0 hardware-signed SOAR playbooks in milliseconds.
+The CyberTrace detection pipeline is an asynchronous, multi-stage event processing fabric. It transforms raw, heterogeneous edge logs into normalized **Open Cybersecurity Schema Framework (OCSF v1.2)** events, matches them against global and private threat intelligence, evaluates Sigma and stateful threshold rules, computes multi-dimensional machine learning anomaly scores, traces causal attack graphs to Patient Zero, and executes TPM 2.0 hardware-signed SOAR playbooks in milliseconds.
 
 ### End-to-End Pipeline Flow Diagram
 
@@ -300,7 +300,7 @@ actions:
     target: "compromised_device_api_key"
 ```
 
-- **TPM 2.0 Hardware Attestation:** Remediation instructions are signed using Platform Configuration Registers (PCRs). The device's local hardware TPM validates that the containment order originated from an authentic Threat Analyser controller before isolating local network interfaces.
+- **TPM 2.0 Hardware Attestation:** Remediation instructions are signed using Platform Configuration Registers (PCRs). The device's local hardware TPM validates that the containment order originated from an authentic CyberTrace controller before isolating local network interfaces.
 
 ---
 

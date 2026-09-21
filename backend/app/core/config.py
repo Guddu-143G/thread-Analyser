@@ -3,7 +3,7 @@ from functools import lru_cache
 
 
 class Settings(BaseSettings):
-    APP_NAME: str = "Threat Analyser"
+    APP_NAME: str = "CyberTrace"
     ENV: str = "development"
     SECRET_KEY: str = "change-me-in-prod"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 12

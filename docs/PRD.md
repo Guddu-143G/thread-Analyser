@@ -1,7 +1,7 @@
-# Threat Analyser — Product Requirements Document
+# CyberTrace — Product Requirements Document
 
 ## 1. Overview
-Threat Analyser is a multi-tenant SaaS platform that detects security threats on personal
+CyberTrace is a multi-tenant SaaS platform that detects security threats on personal
 devices and within organizations by ingesting logs, matching them against threat
 intelligence (IOCs), and evaluating them against configurable detection rules. It gives
 security teams (and individuals) a single console to see risk in near real time and

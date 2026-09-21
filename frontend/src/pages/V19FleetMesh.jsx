@@ -218,7 +218,7 @@ export default function V19FleetMesh() {
         device_id: selectedFileDevice,
         direction: 'DOWNLOAD',
         local_file_path: remotePath,
-        file_content: `[Forensic Snapshot of ${remotePath} retrieved by Threat Analyser Live Response Engine]`
+        file_content: `[Forensic Snapshot of ${remotePath} retrieved by CyberTrace Live Response Engine]`
       })
       showFeedback(`File ${remotePath} transferred! SHA-256: ${res.data.sha256_hash.slice(0, 16)}...`, 'success')
       await fetchAuditLogs()
@@ -295,13 +295,12 @@ export default function V19FleetMesh() {
       {/* Global Feedback Banner */}
       {feedback && (
         <div
-          className={`p-4 rounded-xl text-sm font-medium border flex items-center justify-between ${
-            feedback.type === 'error'
+          className={`p-4 rounded-xl text-sm font-medium border flex items-center justify-between ${feedback.type === 'error'
               ? 'bg-rose-500/10 text-rose-400 border-rose-500/30'
               : feedback.type === 'info'
-              ? 'bg-blue-500/10 text-blue-400 border-blue-500/30'
-              : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-          }`}
+                ? 'bg-blue-500/10 text-blue-400 border-blue-500/30'
+                : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+            }`}
         >
           <span>{feedback.msg}</span>
           <button onClick={() => setFeedback(null)} className="text-xs opacity-60 hover:opacity-100">
@@ -322,11 +321,10 @@ export default function V19FleetMesh() {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center space-x-2 px-4 py-2.5 rounded-lg text-xs font-medium transition whitespace-nowrap ${
-              activeTab === tab.id
+            className={`flex items-center space-x-2 px-4 py-2.5 rounded-lg text-xs font-medium transition whitespace-nowrap ${activeTab === tab.id
                 ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-600/20 font-semibold'
                 : 'text-gray-400 hover:text-white hover:bg-gray-800/60'
-            }`}
+              }`}
           >
             <span>{tab.icon}</span>
             <span>{tab.label}</span>
@@ -385,8 +383,8 @@ export default function V19FleetMesh() {
                     dev.latency_status === 'green'
                       ? '#10b981'
                       : dev.latency_status === 'amber'
-                      ? '#f59e0b'
-                      : '#ef4444'
+                        ? '#f59e0b'
+                        : '#ef4444'
                   return (
                     <g
                       key={dev.device_id}
@@ -458,13 +456,12 @@ export default function V19FleetMesh() {
                   <div className="flex items-center justify-between">
                     <div className="font-bold text-sm text-white font-mono truncate">{d.hostname}</div>
                     <span
-                      className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase ${
-                        d.status === 'active'
+                      className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase ${d.status === 'active'
                           ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
                           : d.status === 'quarantined'
-                          ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                          : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                      }`}
+                            ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                            : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                        }`}
                     >
                       {d.status}
                     </span>
@@ -510,11 +507,10 @@ export default function V19FleetMesh() {
                     </button>
                     <button
                       onClick={() => handleIsolateDevice(d.device_id, d.status !== 'quarantined')}
-                      className={`px-2 py-1 rounded font-semibold text-xs ${
-                        d.status === 'quarantined'
+                      className={`px-2 py-1 rounded font-semibold text-xs ${d.status === 'quarantined'
                           ? 'bg-emerald-600 hover:bg-emerald-500 text-white'
                           : 'bg-rose-600 hover:bg-rose-500 text-white'
-                      }`}
+                        }`}
                     >
                       {d.status === 'quarantined' ? 'Rejoin' : 'Isolate'}
                     </button>
@@ -915,11 +911,10 @@ export default function V19FleetMesh() {
                         </td>
                         <td className="py-3 px-4">
                           <span
-                            className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                              a.execution_status === 'SUCCESS'
+                            className={`px-2 py-0.5 rounded text-[10px] font-bold ${a.execution_status === 'SUCCESS'
                                 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
                                 : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                            }`}
+                              }`}
                           >
                             {a.execution_status}
                           </span>
@@ -962,11 +957,10 @@ export default function V19FleetMesh() {
                         <td className="py-3 px-4 text-cyan-400">{t.transfer_id.slice(0, 8)}...</td>
                         <td className="py-3 px-4">
                           <span
-                            className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                              t.transfer_direction === 'DOWNLOAD'
+                            className={`px-2 py-0.5 rounded text-[10px] font-bold ${t.transfer_direction === 'DOWNLOAD'
                                 ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30'
                                 : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                            }`}
+                              }`}
                           >
                             {t.transfer_direction}
                           </span>

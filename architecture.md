@@ -1,4 +1,4 @@
-# 🛡️ Threat Analyser: In-Depth System Architecture Specification (v1.0 – v30.0)
+# 🛡️ CyberTrace: In-Depth System Architecture Specification (v1.0 – v30.0)
 
 **Document Classification:** Master Engineering Architecture Specification  
 **Platform Version:** 30.0.0 (Generative Security Digital Twin & Autonomous Cyber Range)  
@@ -8,7 +8,7 @@
 
 ## 1. Executive Summary & Architectural Vision
 
-**Threat Analyser** is an enterprise-grade, multi-tenant Software-as-a-Service (SaaS) autonomous cybersecurity intelligence, SIEM (Security Information and Event Management), SOAR (Security Orchestration, Automation, and Response), and Cyber Range platform. 
+**CyberTrace** is an enterprise-grade, multi-tenant Software-as-a-Service (SaaS) autonomous cybersecurity intelligence, SIEM (Security Information and Event Management), SOAR (Security Orchestration, Automation, and Response), and Cyber Range platform. 
 
 The system is engineered to solve the fundamental scaling, privacy, and proactive hardening dilemmas facing modern SecOps teams:
 1. **High-Throughput Log Ingestion at Carrier Scale (1,000,000+ EPS):** Ingesting, parsing, and normalizing heterogeneous enterprise telemetry in real time without CPU lockups or dropped packets.
@@ -18,7 +18,7 @@ The system is engineered to solve the fundamental scaling, privacy, and proactiv
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                                THREAT ANALYSER - MACRO PLATFORM CAPABILITIES                     │
+│                                CyberTrace - MACRO PLATFORM CAPABILITIES                     │
 ├──────────────────────────────┬─────────────────────────────────┬─────────────────────────────────┤
 │ Core Layer                   │ Primary Technologies            │ Key Architectural Function      │
 ├──────────────────────────────┼─────────────────────────────────┼─────────────────────────────────┤
@@ -291,7 +291,7 @@ Version 30 introduces an isolated server-side simulation sandbox that clones the
 
 ### 3.5. Causal Data Provenance Graph (DPG) & Autonomous SOAR Engine (v26.0)
 
-Traditional SIEMs treat alerts as isolated rows. Threat Analyser implements a stateful **Data Provenance Graph (DPG)** that tracks causal relationships between system entities:
+Traditional SIEMs treat alerts as isolated rows. CyberTrace implements a stateful **Data Provenance Graph (DPG)** that tracks causal relationships between system entities:
 
 ```
 [Attacker Network Socket] ──(CONNECT)──► [Nginx Worker Process]
@@ -413,7 +413,7 @@ erDiagram
 
 ## 5. Production Deployment & Cloud-Native Autoscaling (KEDA)
 
-Threat Analyser is designed for containerized deployment via Docker Compose or Kubernetes with automated horizontal pod autoscaling.
+CyberTrace is designed for containerized deployment via Docker Compose or Kubernetes with automated horizontal pod autoscaling.
 
 ### KEDA Celery ScaledObject Topology
 
@@ -500,7 +500,7 @@ The platform exposes an extensive REST and WebSocket API surface:
 
 ## 8. Verification, Testing & Quality Assurance
 
-Threat Analyser enforces a multi-tier automated testing strategy:
+CyberTrace enforces a multi-tier automated testing strategy:
 - **Unit Test Harness (`backend/tests/run_all_tests.py`):** Automatically discovers and executes all 23 unit test suites across modules (v1 through v30), validating HMAC pseudonymization, Merkle chaining, OCSF parsing, Sigma compilation, and database persistence.
 - **End-to-End Live Integration Tests (`backend/tests/e2e/`):** Executes full HTTP and WebSocket roundtrips against the running Docker stack, validating authentication, live ingestion bursts, scenario triggers, and ledger audits.
 - **Frontend Production Compilation (`npm run build`):** Verifies that all JSX components, Tailwind tokens, and routes compile cleanly without warnings or dependency issues.

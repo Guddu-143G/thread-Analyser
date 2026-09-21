@@ -1,5 +1,5 @@
 """
-Unit test suite for Threat Analyser Version 7.0 Vanguard Modules:
+Unit test suite for CyberTrace Version 7.0 Vanguard Modules:
 - Post-Quantum Cryptography (PQCHybridNegotiator)
 - Self-Supervised Graph Neural Network (GNNProvenanceClassifier)
 - Autonomous Threat Twin (AutonomousThreatTwinEngine)

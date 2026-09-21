@@ -418,44 +418,40 @@ export default function V24BasebandLedger() {
       <div className="flex flex-wrap gap-2 border-b border-base-700 pb-2">
         <button
           onClick={() => setActiveTab('baseband')}
-          className={`px-4 py-2 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-2 ${
-            activeTab === 'baseband'
+          className={`px-4 py-2 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-2 ${activeTab === 'baseband'
               ? 'bg-cyan-950 text-cyan-200 border border-cyan-600/70 shadow-sm'
               : 'bg-base-900/60 text-slate-400 hover:text-slate-200 hover:bg-base-800'
-          }`}
+            }`}
         >
           <span>📱</span>
           <span>1. Baseband Modem &amp; 3-Tower Triangulation</span>
         </button>
         <button
           onClick={() => setActiveTab('gps')}
-          className={`px-4 py-2 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-2 ${
-            activeTab === 'gps'
+          className={`px-4 py-2 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-2 ${activeTab === 'gps'
               ? 'bg-amber-950 text-amber-200 border border-amber-600/70 shadow-sm'
               : 'bg-base-900/60 text-slate-400 hover:text-slate-200 hover:bg-base-800'
-          }`}
+            }`}
         >
           <span>📡</span>
           <span>2. Adaptive GPS Scheduler Engine</span>
         </button>
         <button
           onClick={() => setActiveTab('network')}
-          className={`px-4 py-2 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-2 ${
-            activeTab === 'network'
+          className={`px-4 py-2 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-2 ${activeTab === 'network'
               ? 'bg-blue-950 text-blue-200 border border-blue-600/70 shadow-sm'
               : 'bg-base-900/60 text-slate-400 hover:text-slate-200 hover:bg-base-800'
-          }`}
+            }`}
         >
           <span>🛡️</span>
           <span>3. Network Interface &amp; ARP Auditing</span>
         </button>
         <button
           onClick={() => setActiveTab('ledger')}
-          className={`px-4 py-2 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-2 ${
-            activeTab === 'ledger'
+          className={`px-4 py-2 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-2 ${activeTab === 'ledger'
               ? 'bg-emerald-950 text-emerald-200 border border-emerald-600/70 shadow-sm'
               : 'bg-base-900/60 text-slate-400 hover:text-slate-200 hover:bg-base-800'
-          }`}
+            }`}
         >
           <span>🔗</span>
           <span>4. Neon Merkle Cryptographic Ledger</span>
@@ -639,11 +635,10 @@ export default function V24BasebandLedger() {
               </div>
 
               {ceirStatus && (
-                <div className={`mt-4 p-3 rounded border font-mono text-xs space-y-1 ${
-                  ceirStatus.transceiver_blocked 
-                    ? 'bg-rose-950/70 border-rose-800 text-rose-200' 
+                <div className={`mt-4 p-3 rounded border font-mono text-xs space-y-1 ${ceirStatus.transceiver_blocked
+                    ? 'bg-rose-950/70 border-rose-800 text-rose-200'
                     : 'bg-emerald-950/70 border-emerald-800 text-emerald-200'
-                }`}>
+                  }`}>
                   <div className="flex justify-between font-bold">
                     <span>Registry Status:</span>
                     <span>{ceirStatus.status}</span>
@@ -981,11 +976,10 @@ export default function V24BasebandLedger() {
 
                 {/* State Machine Flowchart Cards */}
                 <div className="space-y-2.5 font-mono text-xs">
-                  <div className={`p-2.5 rounded border transition-all ${
-                    gpsDecision?.state === 'STATIONARY'
+                  <div className={`p-2.5 rounded border transition-all ${gpsDecision?.state === 'STATIONARY'
                       ? 'bg-emerald-950/80 border-emerald-500 text-emerald-200 shadow-md scale-[1.02]'
                       : 'bg-base-950 border-base-800 text-slate-400'
-                  }`}>
+                    }`}>
                     <div className="flex justify-between font-bold">
                       <span>1. STATIONARY STATE</span>
                       <span>300s (5m) Interval</span>
@@ -993,11 +987,10 @@ export default function V24BasebandLedger() {
                     <p className="text-[10px] text-slate-500 mt-0.5">Speed &lt; 3.0 m/s inside geofence boundary &bull; Low power draw</p>
                   </div>
 
-                  <div className={`p-2.5 rounded border transition-all ${
-                    gpsDecision?.state === 'TRANSIT'
+                  <div className={`p-2.5 rounded border transition-all ${gpsDecision?.state === 'TRANSIT'
                       ? 'bg-blue-950/80 border-blue-500 text-blue-200 shadow-md scale-[1.02]'
                       : 'bg-base-950 border-base-800 text-slate-400'
-                  }`}>
+                    }`}>
                     <div className="flex justify-between font-bold">
                       <span>2. TRANSIT STATE</span>
                       <span>15s Interval</span>
@@ -1005,11 +998,10 @@ export default function V24BasebandLedger() {
                     <p className="text-[10px] text-slate-500 mt-0.5">Speed &gt; 3.0 m/s inside geofence &bull; Dynamic motion vectoring</p>
                   </div>
 
-                  <div className={`p-2.5 rounded border transition-all ${
-                    gpsDecision?.state === 'OUTSIDE_GEOFENCE'
+                  <div className={`p-2.5 rounded border transition-all ${gpsDecision?.state === 'OUTSIDE_GEOFENCE'
                       ? 'bg-amber-950/80 border-amber-500 text-amber-200 shadow-md scale-[1.02]'
                       : 'bg-base-950 border-base-800 text-slate-400'
-                  }`}>
+                    }`}>
                     <div className="flex justify-between font-bold">
                       <span>3. OUTSIDE GEOFENCE (HIGH ALERT)</span>
                       <span>10s - 30s Interval</span>
@@ -1017,11 +1009,10 @@ export default function V24BasebandLedger() {
                     <p className="text-[10px] text-slate-500 mt-0.5">Distance &gt; Geofence Radius &bull; Active perimeter breach tracking</p>
                   </div>
 
-                  <div className={`p-2.5 rounded border transition-all ${
-                    gpsDecision?.state === 'CRITICAL_POWER'
+                  <div className={`p-2.5 rounded border transition-all ${gpsDecision?.state === 'CRITICAL_POWER'
                       ? 'bg-rose-950/80 border-rose-500 text-rose-200 shadow-md scale-[1.02]'
                       : 'bg-base-950 border-base-800 text-slate-400'
-                  }`}>
+                    }`}>
                     <div className="flex justify-between font-bold">
                       <span>4. CRITICAL POWER OVERRIDE</span>
                       <span>300s - 1800s Interval</span>
@@ -1174,7 +1165,7 @@ export default function V24BasebandLedger() {
 
               <div className="space-y-3 font-mono text-xs">
                 <p className="text-slate-400 text-[11px]">
-                  When a physical gateway MAC changes while the IP configuration remains static, Threat Analyser's
+                  When a physical gateway MAC changes while the IP configuration remains static, CyberTrace's
                   watchdog detects ARP cache poisoning or unauthorized gateway redirection.
                 </p>
 
@@ -1210,11 +1201,10 @@ export default function V24BasebandLedger() {
               </div>
 
               {mitmAlertData && (
-                <div className={`mt-4 p-3.5 rounded border font-mono text-xs space-y-1.5 ${
-                  mitmAlertData.arp_mitm_detected
+                <div className={`mt-4 p-3.5 rounded border font-mono text-xs space-y-1.5 ${mitmAlertData.arp_mitm_detected
                     ? 'bg-rose-950/80 border-rose-700 text-rose-200'
                     : 'bg-emerald-950/80 border-emerald-700 text-emerald-200'
-                }`}>
+                  }`}>
                   <div className="flex justify-between font-bold">
                     <span>Watchdog Assessment:</span>
                     <span>{mitmAlertData.arp_mitm_detected ? '🚨 MITM ATTACK DETECTED' : 'SECURE'}</span>
@@ -1359,11 +1349,10 @@ export default function V24BasebandLedger() {
 
               {/* Verification Panel */}
               {ledgerVerification && (
-                <div className={`mt-4 p-3.5 rounded-lg border font-mono text-xs space-y-1.5 ${
-                  ledgerVerification.is_ledger_valid
+                <div className={`mt-4 p-3.5 rounded-lg border font-mono text-xs space-y-1.5 ${ledgerVerification.is_ledger_valid
                     ? 'bg-emerald-950/80 border-emerald-700 text-emerald-200'
                     : 'bg-rose-950/80 border-rose-700 text-rose-200'
-                }`}>
+                  }`}>
                   <div className="flex justify-between font-bold">
                     <span>Cryptographic Verification:</span>
                     <span>{ledgerVerification.is_ledger_valid ? '✅ VERIFIED (UNBROKEN)' : '🚨 TAMPER_DETECTED'}</span>

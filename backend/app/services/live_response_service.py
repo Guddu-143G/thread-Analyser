@@ -181,7 +181,7 @@ class LiveResponseOrchestrator:
             raw_output = "[+] eBPF host isolation enforced. All outbound traffic blocked except telemetry reverse tunnel.\n"
         elif "cat " in cmd_lower:
             filename = command_string.split()[-1]
-            raw_output = f"# Content of {filename}\nNAME=\"Alpine Linux\"\nVERSION_ID=3.19.1\nPRETTY_NAME=\"Threat Analyser Enclave Endpoint Node\"\n"
+            raw_output = f"# Content of {filename}\nNAME=\"Alpine Linux\"\nVERSION_ID=3.19.1\nPRETTY_NAME=\"CyberTrace Enclave Endpoint Node\"\n"
         else:
             raw_output = f"Executed: {command_string}\n[Exit status 0 - command completed successfully across reverse mTLS tunnel]\n"
 

@@ -253,7 +253,7 @@ class FleetActionManager:
         if not device:
             raise ValueError(f"Device '{device_id}' not found.")
 
-        content_bytes = file_content.encode("utf-8") if file_content else b"Threat Analyser Secured Artifact Payload"
+        content_bytes = file_content.encode("utf-8") if file_content else b"CyberTrace Secured Artifact Payload"
         sha256 = hashlib.sha256(content_bytes).hexdigest()
         storage_url = server_storage_url or f"neon://storage/fleet/{device.id}/{sha256[:16]}_{os.path.basename(local_file_path)}"
 

@@ -1,7 +1,7 @@
-# Threat Analyser eBPF Kernel Probes (v4.0)
+# CyberTrace eBPF Kernel Probes (v4.0)
 
 ## Overview
-Threat Analyser v4 introduces **eBPF (Extended Berkeley Packet Filter)** in-kernel telemetry collection using the Rust [`aya`](https://aya-rs.dev/) framework.
+CyberTrace v4 introduces **eBPF (Extended Berkeley Packet Filter)** in-kernel telemetry collection using the Rust [`aya`](https://aya-rs.dev/) framework.
 
 Unlike user-space log forwarders that tail files in `/var/log` (which can be manipulated or terminated by attackers with local root privileges), eBPF bytecode is verified by the kernel JIT engine and runs sandboxed at ring 0, directly capturing system calls at execution boundaries.
 
@@ -24,7 +24,7 @@ User Space Daemon              ▼
 ┌─────────────────────────────────────────────────────────────┐
 │  • Polls Aya Ring Buffer without context-switch latency     │
 │  • Maps binary syscalls into OCSF v1.1.0 JSON entities       │
-│  • Streams batches to Threat Analyser Ingestion API         │
+│  • Streams batches to CyberTrace Ingestion API         │
 └─────────────────────────────────────────────────────────────┘
 ```
 

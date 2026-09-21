@@ -2,7 +2,7 @@
 name = "threat-analyser-ebpf"
 version = "4.0.0"
 edition = "2021"
-authors = ["Threat Analyser Security Engineering Team"]
+authors = ["CyberTrace Security Engineering Team"]
 description = "High-performance Linux Kernel eBPF Probes for Un-bypassable System Call Auditing"
 
 [dependencies]

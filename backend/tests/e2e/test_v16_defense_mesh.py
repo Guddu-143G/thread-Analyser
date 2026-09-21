@@ -157,7 +157,7 @@ https://verify-office365-security.com/login.php
     with urllib.request.urlopen(req) as res:
         svg_content = res.read().decode("utf-8")
         assert "<svg" in svg_content
-        assert "THREAT ANALYSER V16 REMOTE SANDBOX" in svg_content
+        assert "CyberTrace V16 REMOTE SANDBOX" in svg_content
         print(f"   [+] Safe Visual Snapshot Rendered ({len(svg_content)} bytes SVG delivered safely without client JS execution)")
 
     # 6. Aggregate Real-Time V16 Mesh Telemetry

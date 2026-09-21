@@ -1,9 +1,9 @@
 // file: agent/ebpf/src/user_daemon.rs
-//! Threat Analyser eBPF User-Space Daemon
+//! CyberTrace eBPF User-Space Daemon
 //!
 //! Loads eBPF bytecode into Linux kernel, polls the shared memory ring buffer,
 //! converts raw kernel syscall structs into OCSF v1.1.0 telemetry, and ships
-//! batches to Threat Analyser backend API via HTTPS.
+//! batches to CyberTrace backend API via HTTPS.
 
 use std::error::Error;
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -79,8 +79,8 @@ pub fn convert_execve_to_ocsf(pid: u32, uid: u32, comm: &str) -> OCSFProcessActi
         metadata: OCSFMetadata {
             version: "1.1.0".to_string(),
             product: OCSFProduct {
-                name: "Threat Analyser eBPF Engine".to_string(),
-                vendor_name: "Threat Analyser".to_string(),
+                name: "CyberTrace eBPF Engine".to_string(),
+                vendor_name: "CyberTrace".to_string(),
                 version: "4.0.0".to_string(),
             },
             source_type: "ebpf_kernel_tracepoint".to_string(),
@@ -110,8 +110,8 @@ pub fn convert_connect_to_ocsf(pid: u32, ip: &str, port: u16) -> OCSFNetworkActi
         metadata: OCSFMetadata {
             version: "1.1.0".to_string(),
             product: OCSFProduct {
-                name: "Threat Analyser eBPF Engine".to_string(),
-                vendor_name: "Threat Analyser".to_string(),
+                name: "CyberTrace eBPF Engine".to_string(),
+                vendor_name: "CyberTrace".to_string(),
                 version: "4.0.0".to_string(),
             },
             source_type: "ebpf_kernel_socket".to_string(),

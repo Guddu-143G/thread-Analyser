@@ -1,4 +1,4 @@
-# Threat Analyser Endpoint Agents
+# CyberTrace Endpoint Agents
 
 This directory contains endpoint collectors and probes for real-time telemetry extraction:
 

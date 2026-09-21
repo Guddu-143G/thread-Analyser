@@ -1,6 +1,6 @@
-# Threat Analyser - System Architecture & Component Design
+# CyberTrace - System Architecture & Component Design
 
-This document details the architectural layout, component boundaries, security models, data flows, and scaling characteristics of the **Threat Analyser** platform.
+This document details the architectural layout, component boundaries, security models, data flows, and scaling characteristics of the **CyberTrace** platform.
 
 ---
 

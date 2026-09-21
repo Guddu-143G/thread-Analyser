@@ -36,7 +36,7 @@ def verify_org_ledger(db: Session, org_id: str):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Verify Threat Analyser Cryptographic Audit Ledger")
+    parser = argparse.ArgumentParser(description="Verify CyberTrace Cryptographic Audit Ledger")
     parser.add_argument("--org-id", type=str, default=None, help="Target Organization UUID (or all if omitted)")
     args = parser.parse_args()
 

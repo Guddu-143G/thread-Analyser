@@ -160,7 +160,7 @@ async def handle_websocket_stream(
         welcome_payload = {
             "event": "connected",
             "payload": {
-                "message": "Connected to Threat Analyser Sub-Millisecond Telemetry Mesh (v12)",
+                "message": "Connected to CyberTrace Sub-Millisecond Telemetry Mesh (v12)",
                 "tenant_id": tenant_id,
                 "server_time": time.time(),
                 "active_locks": ws_manager.alert_locks.get(tenant_id, {}),

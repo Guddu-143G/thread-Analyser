@@ -215,7 +215,7 @@ class RealtimeURLChecker:
   <text x="80" y="396" fill="#ffffff" font-family="sans-serif" font-size="12" font-weight="bold">Verify Access</text>
 
   <!-- Safe Watermark -->
-  <text x="440" y="396" fill="#475569" font-family="monospace" font-size="10">THREAT ANALYSER V16 REMOTE SANDBOX [NO LOCAL EXECUTION]</text>
+  <text x="440" y="396" fill="#475569" font-family="monospace" font-size="10">CyberTrace V16 REMOTE SANDBOX [NO LOCAL EXECUTION]</text>
 </svg>"""
         return svg
 

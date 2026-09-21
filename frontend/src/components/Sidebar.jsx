@@ -106,7 +106,7 @@ export default function Sidebar() {
         <div className="flex items-center gap-2.5">
           <span className="text-accent text-xl font-mono font-bold">◆</span>
           <div>
-            <span className="font-mono font-bold text-slate-100 tracking-wider text-sm block">THREAT ANALYSER</span>
+            <span className="font-mono font-bold text-slate-100 tracking-wider text-sm block">CyberTrace</span>
             <span className="text-[10px] text-purple-400 font-mono tracking-widest uppercase">Simulation STG v29.0</span>
           </div>
         </div>
@@ -132,10 +132,9 @@ export default function Sidebar() {
             key={l.to}
             to={l.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-cyan-950 text-cyan-200 border border-cyan-500/60 font-semibold shadow-sm'
-                  : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-cyan-950 text-cyan-200 border border-cyan-500/60 font-semibold shadow-sm'
+                : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
               }`
             }
           >
@@ -153,10 +152,9 @@ export default function Sidebar() {
             key={l.to}
             to={l.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-purple-950 text-purple-200 border border-purple-600/60 font-semibold shadow-sm'
-                  : 'text-slate-300 hover:text-purple-200 hover:bg-base-800/80'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-purple-950 text-purple-200 border border-purple-600/60 font-semibold shadow-sm'
+                : 'text-slate-300 hover:text-purple-200 hover:bg-base-800/80'
               }`
             }
           >
@@ -174,10 +172,9 @@ export default function Sidebar() {
             key={l.to}
             to={l.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-indigo-950 text-indigo-200 border border-indigo-600/60 font-semibold shadow-sm'
-                  : 'text-slate-300 hover:text-indigo-200 hover:bg-base-800/80'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-indigo-950 text-indigo-200 border border-indigo-600/60 font-semibold shadow-sm'
+                : 'text-slate-300 hover:text-indigo-200 hover:bg-base-800/80'
               }`
             }
           >
@@ -195,10 +192,9 @@ export default function Sidebar() {
             key={l.to}
             to={l.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-cyan-950 text-cyan-200 border border-cyan-600/60 font-semibold shadow-sm'
-                  : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-cyan-950 text-cyan-200 border border-cyan-600/60 font-semibold shadow-sm'
+                : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
               }`
             }
           >
@@ -217,10 +213,9 @@ export default function Sidebar() {
             key={l.to}
             to={l.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-cyan-950 text-cyan-200 border border-cyan-600/60 font-semibold shadow-sm'
-                  : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-cyan-950 text-cyan-200 border border-cyan-600/60 font-semibold shadow-sm'
+                : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
               }`
             }
           >
@@ -239,10 +234,9 @@ export default function Sidebar() {
             key={l.to}
             to={l.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-indigo-950 text-indigo-200 border border-indigo-600/60 font-semibold shadow-sm'
-                  : 'text-slate-300 hover:text-indigo-200 hover:bg-base-800/80'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-indigo-950 text-indigo-200 border border-indigo-600/60 font-semibold shadow-sm'
+                : 'text-slate-300 hover:text-indigo-200 hover:bg-base-800/80'
               }`
             }
           >
@@ -260,10 +254,9 @@ export default function Sidebar() {
             key={l.to}
             to={l.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-emerald-950 text-emerald-200 border border-emerald-600/60 font-semibold shadow-sm'
-                  : 'text-slate-300 hover:text-emerald-200 hover:bg-base-800/80'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-emerald-950 text-emerald-200 border border-emerald-600/60 font-semibold shadow-sm'
+                : 'text-slate-300 hover:text-emerald-200 hover:bg-base-800/80'
               }`
             }
           >
@@ -282,10 +275,9 @@ export default function Sidebar() {
             key={l.to}
             to={l.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-indigo-950 text-indigo-200 border border-indigo-600/60 font-semibold shadow-sm'
-                  : 'text-slate-300 hover:text-indigo-200 hover:bg-base-800/80'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-indigo-950 text-indigo-200 border border-indigo-600/60 font-semibold shadow-sm'
+                : 'text-slate-300 hover:text-indigo-200 hover:bg-base-800/80'
               }`
             }
           >
@@ -303,10 +295,9 @@ export default function Sidebar() {
             key={l.to}
             to={l.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-teal-950 text-teal-200 border border-teal-600/60 font-semibold shadow-sm'
-                  : 'text-slate-300 hover:text-teal-200 hover:bg-base-800/80'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-teal-950 text-teal-200 border border-teal-600/60 font-semibold shadow-sm'
+                : 'text-slate-300 hover:text-teal-200 hover:bg-base-800/80'
               }`
             }
           >
@@ -324,10 +315,9 @@ export default function Sidebar() {
             key={l.to}
             to={l.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-cyan-950 text-cyan-200 border border-cyan-600/60 font-semibold shadow-sm'
-                  : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-cyan-950 text-cyan-200 border border-cyan-600/60 font-semibold shadow-sm'
+                : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
               }`
             }
           >
@@ -345,10 +335,9 @@ export default function Sidebar() {
             key={l.to}
             to={l.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-cyan-950 text-cyan-200 border border-cyan-600/60 font-semibold shadow-sm'
-                  : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-cyan-950 text-cyan-200 border border-cyan-600/60 font-semibold shadow-sm'
+                : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
               }`
             }
           >
@@ -366,10 +355,9 @@ export default function Sidebar() {
             key={l.to}
             to={l.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-emerald-950 text-emerald-200 border border-emerald-600/60 font-semibold shadow-sm'
-                  : 'text-slate-300 hover:text-emerald-200 hover:bg-base-800/80'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-emerald-950 text-emerald-200 border border-emerald-600/60 font-semibold shadow-sm'
+                : 'text-slate-300 hover:text-emerald-200 hover:bg-base-800/80'
               }`
             }
           >
@@ -387,10 +375,9 @@ export default function Sidebar() {
             key={l.to}
             to={l.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-cyan-950 text-cyan-200 border border-cyan-600/60 font-semibold shadow-sm'
-                  : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-cyan-950 text-cyan-200 border border-cyan-600/60 font-semibold shadow-sm'
+                : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
               }`
             }
           >
@@ -408,10 +395,9 @@ export default function Sidebar() {
             key={l.to}
             to={l.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-cyan-950 text-cyan-200 border border-cyan-600/60 font-semibold shadow-sm'
-                  : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-cyan-950 text-cyan-200 border border-cyan-600/60 font-semibold shadow-sm'
+                : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
               }`
             }
           >
@@ -428,10 +414,9 @@ export default function Sidebar() {
             key={l.to}
             to={l.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-cyan-950 text-cyan-200 border border-cyan-600/60 font-semibold shadow-sm'
-                  : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-cyan-950 text-cyan-200 border border-cyan-600/60 font-semibold shadow-sm'
+                : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
               }`
             }
           >
@@ -449,10 +434,9 @@ export default function Sidebar() {
             key={l.to}
             to={l.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-purple-950 text-purple-200 border border-purple-600/60 font-semibold shadow-sm'
-                  : 'text-slate-300 hover:text-purple-200 hover:bg-base-800/80'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-purple-950 text-purple-200 border border-purple-600/60 font-semibold shadow-sm'
+                : 'text-slate-300 hover:text-purple-200 hover:bg-base-800/80'
               }`
             }
           >
@@ -470,10 +454,9 @@ export default function Sidebar() {
             key={l.to}
             to={l.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-cyan-950 text-cyan-200 border border-cyan-600/60 font-semibold shadow-sm'
-                  : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-cyan-950 text-cyan-200 border border-cyan-600/60 font-semibold shadow-sm'
+                : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
               }`
             }
           >
@@ -491,10 +474,9 @@ export default function Sidebar() {
             key={l.to}
             to={l.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-emerald-950 text-emerald-200 border border-emerald-600/60 font-semibold shadow-sm'
-                  : 'text-slate-300 hover:text-emerald-200 hover:bg-base-800/80'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-emerald-950 text-emerald-200 border border-emerald-600/60 font-semibold shadow-sm'
+                : 'text-slate-300 hover:text-emerald-200 hover:bg-base-800/80'
               }`
             }
           >
@@ -512,10 +494,9 @@ export default function Sidebar() {
             key={l.to}
             to={l.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-rose-950 text-rose-200 border border-rose-600/60 font-semibold shadow-sm'
-                  : 'text-slate-300 hover:text-rose-200 hover:bg-base-800/80'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-rose-950 text-rose-200 border border-rose-600/60 font-semibold shadow-sm'
+                : 'text-slate-300 hover:text-rose-200 hover:bg-base-800/80'
               }`
             }
           >
@@ -533,10 +514,9 @@ export default function Sidebar() {
             key={l.to}
             to={l.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-cyan-950 text-cyan-200 border border-cyan-600/60 font-semibold shadow-sm'
-                  : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-cyan-950 text-cyan-200 border border-cyan-600/60 font-semibold shadow-sm'
+                : 'text-slate-300 hover:text-cyan-200 hover:bg-base-800/80'
               }`
             }
           >
@@ -552,10 +532,9 @@ export default function Sidebar() {
             to={l.to}
             end={l.to === '/'}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-accent/15 text-accent border border-accent/30 font-semibold shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-base-800'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-accent/15 text-accent border border-accent/30 font-semibold shadow-sm'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-base-800'
               }`
             }
           >
@@ -570,10 +549,9 @@ export default function Sidebar() {
             key={l.to}
             to={l.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-accent/15 text-accent border border-accent/30 font-semibold shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-base-800'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-accent/15 text-accent border border-accent/30 font-semibold shadow-sm'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-base-800'
               }`
             }
           >
@@ -588,10 +566,9 @@ export default function Sidebar() {
             key={l.to}
             to={l.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                isActive
-                  ? 'bg-accent/15 text-accent border border-accent/30 font-semibold shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-base-800'
+              `flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${isActive
+                ? 'bg-accent/15 text-accent border border-accent/30 font-semibold shadow-sm'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-base-800'
               }`
             }
           >

@@ -33,7 +33,7 @@ export default function Register() {
           <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-2xl mb-3 shadow-lg shadow-cyan-500/10">
             ◆
           </div>
-          <h1 className="font-mono text-xl font-bold tracking-wider text-slate-100">THREAT ANALYSER</h1>
+          <h1 className="font-mono text-xl font-bold tracking-wider text-slate-100">CyberTrace</h1>
           <p className="text-slate-500 text-xs mt-1">Tenant Organization Onboarding</p>
           <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-cyan-950/60 text-cyan-400 border border-cyan-800/50">
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
@@ -47,7 +47,7 @@ export default function Register() {
               {error}
             </div>
           )}
-          
+
           <div>
             <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider font-mono mb-1.5">
               Organization Name

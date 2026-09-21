@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Synthetic Threat Telemetry Generator for Threat Analyser.
+Synthetic Threat Telemetry Generator for CyberTrace.
 
 Simulates enterprise attack footprints to test OCSF normalization,
 IOC matching, Sigma rules, threshold sliding windows, and ML anomaly detection.
@@ -81,14 +81,14 @@ def push_telemetry(endpoint: str, api_key: str, logs: str):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Threat Analyser Telemetry & Attack Simulator")
+    parser = argparse.ArgumentParser(description="CyberTrace Telemetry & Attack Simulator")
     parser.add_argument(
         "--attack-type",
         choices=["ssh_brute_force", "credential_dump", "powershell_obfuscated", "sudo_escalation", "c2_traffic", "all"],
         default="all",
         help="Type of attack scenario to synthesize"
     )
-    parser.add_argument("--endpoint", default="http://localhost:8000", help="Base URL of Threat Analyser backend")
+    parser.add_argument("--endpoint", default="http://localhost:8000", help="Base URL of CyberTrace backend")
     parser.add_argument("--api-key", default="sandbox_device_key", help="Device API key for authentication")
     parser.add_argument("--print-only", action="store_true", help="Print generated logs to stdout without sending")
 
