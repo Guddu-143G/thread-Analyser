@@ -7,8 +7,18 @@ from sqlalchemy.orm import Session
 
 from app.core.db import SessionLocal
 from app.models.models import MLModel, MLModelRun, MLFeatureBaseline, Alert, DeviceHeartbeat
-from app.detection.anomaly_pipeline import SecurityAnomalyDetector, ml_manager, NUMERIC_FEATURES
-from app.workers.celery_app import celery_app
+try:
+    from app.workers.celery_app import celery_app
+except Exception:
+    celery_app = None
+
+if celery_app is None:
+    class DummyCelery:
+        def task(self, *args, **kwargs):
+            def decorator(fn):
+                return fn
+            return decorator
+    celery_app = DummyCelery()
 
 logger = logging.getLogger(__name__)
 

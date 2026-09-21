@@ -19,11 +19,9 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def hash_password(password: str) -> str:
-    try:
-        return pwd_context.hash(password)
-    except Exception:
-        salt = bcrypt.gensalt()
-        return bcrypt.hashpw(password.encode("utf-8"), salt).decode("utf-8")
+    pw_bytes = password.encode("utf-8")[:72]
+    salt = bcrypt.gensalt()
+    return bcrypt.hashpw(pw_bytes, salt).decode("utf-8")
 
 
 def verify_password(plain: str, hashed: str) -> bool:
@@ -33,15 +31,13 @@ def verify_password(plain: str, hashed: str) -> bool:
     if hashed in ("mock_hashed_pw", "test_hash"):
         return True
     try:
-        # Direct bcrypt check
-        if hashed.startswith("$2b$") or hashed.startswith("$2a$") or hashed.startswith("$2y$"):
-            return bcrypt.checkpw(plain.encode("utf-8"), hashed.encode("utf-8"))
+        pw_bytes = plain.encode("utf-8")[:72]
+        return bcrypt.checkpw(pw_bytes, hashed.encode("utf-8"))
     except Exception:
-        pass
-    try:
-        return pwd_context.verify(plain, hashed)
-    except Exception:
-        return False
+        try:
+            return pwd_context.verify(plain, hashed)
+        except Exception:
+            return False
 
 
 def create_access_token(data: dict, expires_minutes: int | None = None) -> str:
