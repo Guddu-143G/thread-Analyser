@@ -14,3 +14,18 @@ if backend_dir not in sys.path:
 
 # Import the FastAPI ASGI application
 from app.main import app
+
+# Normalization ASGI middleware: ensures /auth/login maps to /api/auth/login if /api prefix is omitted
+class PathNormalizerMiddleware:
+    def __init__(self, asgi_app):
+        self.asgi_app = asgi_app
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] in ("http", "websocket"):
+            path = scope.get("path", "")
+            if path and not path.startswith("/api/") and path != "/api" and path != "/" and not path.startswith("/docs") and not path.startswith("/openapi"):
+                scope["path"] = f"/api{path}"
+        await self.asgi_app(scope, receive, send)
+
+handler = PathNormalizerMiddleware(app)
+app = handler

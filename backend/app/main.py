@@ -129,6 +129,34 @@ async def on_startup():
     except Exception as e:
         print(f"[Startup Warning] Schema verification skipped: {e}")
 
+    # Ensure default admin user is seeded on startup
+    try:
+        from app.core.db import SessionLocal
+        from app.models.models import User, Organization, Role
+        from app.core.security import hash_password
+
+        with SessionLocal() as db:
+            default_email = "subhojitacharya143@gmail.com"
+            existing_user = db.query(User).filter(User.email == default_email).first()
+            if not existing_user:
+                org = db.query(Organization).first()
+                if not org:
+                    org = Organization(name="CyberTrace SecOps")
+                    db.add(org)
+                    db.flush()
+                new_user = User(
+                    org_id=org.id,
+                    email=default_email,
+                    hashed_password=hash_password("Subhoguddu143"),
+                    role=Role.admin
+                )
+                db.add(new_user)
+                db.commit()
+                print(f"[Startup] Seeded admin user: {default_email}")
+    except Exception as e:
+        print(f"[Startup Warning] User seed skipped: {e}")
+
+
 
 
 @app.get("/api/health")

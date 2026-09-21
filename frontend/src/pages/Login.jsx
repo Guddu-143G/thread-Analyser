@@ -20,7 +20,14 @@ export default function Login() {
       await login(cleanEmail, password)
       navigate('/')
     } catch (err) {
-      setError(err.response?.data?.detail || 'Login failed')
+      const detail = err.response?.data?.detail
+      if (detail) {
+        setError(detail)
+      } else if (err.message === 'Network Error' || !err.response) {
+        setError('Unable to reach backend API. If you are a new user, please click "Register Organization" below.')
+      } else {
+        setError(`Authentication error: ${err.response?.data?.message || 'Invalid credentials or unregistered account. Please Register below.'}`)
+      }
     } finally {
       setLoading(false)
     }
