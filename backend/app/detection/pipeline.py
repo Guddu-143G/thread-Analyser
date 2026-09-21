@@ -21,7 +21,7 @@ def get_tenant_correlator(org_id: str) -> SecurityCorrelationEngine:
 
 
 def process_log_batch(
-    db: Session, org_id: str, device_id: str | None, raw_text: str
+    db: Session, org_id: str, device_id: Optional[str], raw_text: str
 ) -> dict:
     parsed_events = parse_log_batch(raw_text, org_id=org_id, device_id=device_id)
     if not parsed_events:

@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
 from pydantic import BaseModel
@@ -22,7 +23,7 @@ class PushPayload(BaseModel):
 @router.post("/upload", response_model=IngestResult)
 async def upload_logs(
     file: UploadFile = File(...),
-    device_id: str | None = None,
+    device_id: Optional[str] = None,
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):

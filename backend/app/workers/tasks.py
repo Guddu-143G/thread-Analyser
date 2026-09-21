@@ -1,4 +1,5 @@
 import logging
+from typing import Optional
 
 from app.workers.celery_app import celery_app
 from app.core.db import SessionLocal
@@ -8,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 @celery_app.task(name="process_log_batch_task", bind=True, max_retries=3)
-def process_log_batch_task(self, org_id: str, device_id: str | None, raw_text: str):
+def process_log_batch_task(self, org_id: str, device_id: Optional[str], raw_text: str):
     db = SessionLocal()
     try:
         result = process_log_batch(db, org_id, device_id, raw_text)

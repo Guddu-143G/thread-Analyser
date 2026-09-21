@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
@@ -14,10 +15,10 @@ router = APIRouter(prefix="/api/alerts", tags=["alerts"])
 
 @router.get("", response_model=list[AlertOut])
 def list_alerts(
-    status: str | None = Query(default=None),
-    severity: str | None = Query(default=None),
-    device_id: str | None = Query(default=None),
-    search: str | None = Query(default=None),
+    status: Optional[str] = Query(default=None),
+    severity: Optional[str] = Query(default=None),
+    device_id: Optional[str] = Query(default=None),
+    search: Optional[str] = Query(default=None),
     limit: int = Query(default=100, le=500),
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
