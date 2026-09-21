@@ -20,7 +20,14 @@ export default function Register() {
       await register(orgName, email, password)
       navigate('/')
     } catch (err) {
-      setError(err.response?.data?.detail || 'Registration failed')
+      const detail = err.response?.data?.detail
+      if (detail) {
+        setError(detail)
+      } else if (err.message === 'Network Error' || !err.response) {
+        setError('Unable to reach backend API. Please check your backend connection.')
+      } else {
+        setError(`Registration error (${err.response?.status || 'Error'}): ${err.response?.data?.message || 'Server error occurred during onboarding.'}`)
+      }
     } finally {
       setLoading(false)
     }
