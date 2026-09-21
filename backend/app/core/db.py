@@ -37,6 +37,7 @@ def init_db_if_needed():
     if _initialized:
         return
     try:
+        from app.models import models, sbom  # noqa: F401
         Base.metadata.create_all(bind=engine)
         # Pre-seed default administrator so login works immediately
         with SessionLocal() as db:

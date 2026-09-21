@@ -4,7 +4,10 @@ import time
 import hashlib
 import logging
 from typing import List, Dict, Any, Optional
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    np = None
 
 try:
     from sklearn.ensemble import IsolationForest

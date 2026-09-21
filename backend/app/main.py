@@ -1,8 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
 
 from app.core.config import settings
-from app.core.db import Base, engine
+from app.core.db import Base, engine, get_db
 from app.models import models, sbom  # noqa: F401 ensures models are registered with Base
 from app.api.routes import (
     auth, devices, iocs, rules, ingest, alerts,
@@ -100,34 +101,37 @@ async def on_startup():
     except Exception as e:
         print(f"[Startup Warning] Base.metadata.create_all failed: {e}")
 
-    # Start Real-Time Redis Pub/Sub Broadcaster in background (if Redis reachable)
-    try:
-        import asyncio
-        asyncio.create_task(ws.redis_event_broadcaster(settings.REDIS_URL))
-    except Exception as e:
-        print(f"[Startup Warning] Redis broadcaster not initialized: {e}")
+    # Start Real-Time Redis Pub/Sub Broadcaster in background (only in long-running servers, NOT serverless)
+    is_serverless = bool(os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"))
+    if not is_serverless:
+        try:
+            import asyncio
+            asyncio.create_task(ws.redis_event_broadcaster(settings.REDIS_URL))
+        except Exception as e:
+            print(f"[Startup Warning] Redis broadcaster not initialized: {e}")
 
-    # Safe incremental schema upgrades for existing volume
-    try:
-        with engine.connect() as conn:
-            conn.execute(
-                Base.metadata.tables["organizations"].select().limit(0)
-            )
-            statements = [
-                "ALTER TABLE tenant_technology_inventory ADD COLUMN IF NOT EXISTS runtime VARCHAR;",
-                "ALTER TABLE tenant_technology_inventory ADD COLUMN IF NOT EXISTS category VARCHAR;",
-                "ALTER TABLE tenant_technology_inventory ADD COLUMN IF NOT EXISTS environment VARCHAR DEFAULT 'production';",
-                "ALTER TABLE tenant_technology_inventory ADD COLUMN IF NOT EXISTS path VARCHAR;"
-            ]
-            for stmt in statements:
-                try:
-                    from sqlalchemy import text
-                    conn.execute(text(stmt))
-                    conn.commit()
-                except Exception:
-                    pass
-    except Exception as e:
-        print(f"[Startup Warning] Schema verification skipped: {e}")
+    # Safe incremental schema upgrades for existing volume (non-serverless)
+    if not is_serverless:
+        try:
+            with engine.connect() as conn:
+                conn.execute(
+                    Base.metadata.tables["organizations"].select().limit(0)
+                )
+                statements = [
+                    "ALTER TABLE tenant_technology_inventory ADD COLUMN IF NOT EXISTS runtime VARCHAR;",
+                    "ALTER TABLE tenant_technology_inventory ADD COLUMN IF NOT EXISTS category VARCHAR;",
+                    "ALTER TABLE tenant_technology_inventory ADD COLUMN IF NOT EXISTS environment VARCHAR DEFAULT 'production';",
+                    "ALTER TABLE tenant_technology_inventory ADD COLUMN IF NOT EXISTS path VARCHAR;"
+                ]
+                for stmt in statements:
+                    try:
+                        from sqlalchemy import text
+                        conn.execute(text(stmt))
+                        conn.commit()
+                    except Exception:
+                        pass
+        except Exception as e:
+            print(f"[Startup Warning] Schema verification skipped: {e}")
 
     # Ensure default admin user is seeded on startup
     try:
@@ -157,8 +161,42 @@ async def on_startup():
         print(f"[Startup Warning] User seed skipped: {e}")
 
 
+# Direct aliases for /auth routes without /api prefix
+@app.post("/auth/login", response_model=auth.TokenResponse, tags=["auth-alias"])
+def direct_login(payload: auth.LoginRequest, request: Request, db: Session = Depends(get_db)):
+    return auth.login(payload, request, db)
+
+
+@app.post("/auth/register", response_model=auth.TokenResponse, tags=["auth-alias"])
+def direct_register(payload: auth.RegisterRequest, db: Session = Depends(get_db)):
+    return auth.register(payload, db)
+
+
+@app.get("/auth/me", response_model=auth.UserOut, tags=["auth-alias"])
+def direct_me(user: auth.User = Depends(auth.get_current_user)):
+    return auth.me(user)
+
+
+
+
+
+@app.get("/")
+def root():
+    return {
+        "status": "online",
+        "service": settings.APP_NAME,
+        "version": "30.0.0",
+        "docs_url": "/docs",
+        "health_url": "/api/health"
+    }
+
+
+@app.get("/health")
+def health_alias():
+    return {"status": "ok", "service": settings.APP_NAME}
 
 
 @app.get("/api/health")
 def health():
     return {"status": "ok", "service": settings.APP_NAME}
+

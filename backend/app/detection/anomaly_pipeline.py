@@ -5,7 +5,11 @@ import logging
 import threading
 from typing import Dict, Any, List, Optional, Tuple
 from collections import OrderedDict
-import numpy as np
+import tempfile
+try:
+    import numpy as np
+except ImportError:
+    np = None
 
 try:
     from sklearn.ensemble import IsolationForest
@@ -17,8 +21,11 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-MODEL_STORAGE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "scratch", "ml_models")
-os.makedirs(MODEL_STORAGE_DIR, exist_ok=True)
+MODEL_STORAGE_DIR = os.path.join(tempfile.gettempdir(), "ml_models")
+try:
+    os.makedirs(MODEL_STORAGE_DIR, exist_ok=True)
+except Exception:
+    pass
 
 # Standard features extracted from telemetry events
 NUMERIC_FEATURES = [
