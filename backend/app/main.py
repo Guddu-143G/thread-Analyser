@@ -96,13 +96,16 @@ app.include_router(ws_cyber_range.router)
 
 @app.on_event("startup")
 async def on_startup():
+    is_serverless = bool(os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"))
+    if is_serverless:
+        # In serverless runtimes (Vercel/Lambda), bypass startup hooks to avoid freeze/timeouts.
+        # DB tables and default user are initialized on-demand via get_db().
+        return
+
     try:
         Base.metadata.create_all(bind=engine)
     except Exception as e:
         print(f"[Startup Warning] Base.metadata.create_all failed: {e}")
-
-    # Start Real-Time Redis Pub/Sub Broadcaster in background (only in long-running servers, NOT serverless)
-    is_serverless = bool(os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"))
     if not is_serverless:
         try:
             import asyncio

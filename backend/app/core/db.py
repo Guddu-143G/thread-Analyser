@@ -11,21 +11,33 @@ raw_env_url = os.environ.get("DATABASE_URL", "").strip()
 db_url = raw_env_url or settings.DATABASE_URL
 is_serverless = bool(os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"))
 
-tmp_db_path = os.path.join(tempfile.gettempdir(), "threat_analyser.db").replace("\\", "/")
+tmp_dir = tempfile.gettempdir()
+try:
+    os.makedirs(tmp_dir, exist_ok=True)
+except Exception:
+    pass
+tmp_db_path = os.path.join(tmp_dir, "threat_analyser.db").replace("\\", "/")
+tmp_db_url = f"sqlite:///{tmp_db_path}" if not tmp_db_path.startswith("/") else f"sqlite://{tmp_db_path}"
 
 # In Vercel or serverless, if no valid external Postgres is provided or still points to docker host @db:5432
 if is_serverless:
     if not raw_env_url or "@db:" in db_url or "@localhost:" in db_url or "sqlite" in db_url:
-        db_url = f"sqlite:///{tmp_db_path}"
+        db_url = tmp_db_url
 
-if db_url.startswith("sqlite"):
+engine = None
+try:
+    if db_url.startswith("sqlite"):
+        connect_args = {"check_same_thread": False}
+        engine = create_engine(db_url, connect_args=connect_args, pool_pre_ping=True)
+    else:
+        if db_url.startswith("postgres://"):
+            db_url = db_url.replace("postgres://", "postgresql+psycopg2://", 1)
+        pool_class = NullPool if is_serverless else QueuePool
+        engine = create_engine(db_url, poolclass=pool_class, pool_pre_ping=True)
+except Exception as err:
+    print(f"[Database Engine Warning] Failed creating engine for {db_url}: {err}. Falling back to SQLite.", flush=True)
     connect_args = {"check_same_thread": False}
-    engine = create_engine(db_url, connect_args=connect_args, pool_pre_ping=True)
-else:
-    if db_url.startswith("postgres://"):
-        db_url = db_url.replace("postgres://", "postgresql+psycopg2://", 1)
-    pool_class = NullPool if is_serverless else QueuePool
-    engine = create_engine(db_url, poolclass=pool_class, pool_pre_ping=True)
+    engine = create_engine(tmp_db_url, connect_args=connect_args, pool_pre_ping=True)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
