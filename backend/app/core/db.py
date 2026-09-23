@@ -42,15 +42,13 @@ if existing_local_db and not os.path.exists(tmp_db_path):
 is_serverless = bool(os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"))
 raw_env_url = (os.environ.get("DATABASE_URL") or getattr(settings, "DATABASE_URL", "")).strip()
 
-NEON_CLOUD_URL = "postgresql://neondb_owner:npg_7ONEDK0pmPha@ep-shy-feather-b36m9clz-pooler.c-4.ap-southeast-1.aws.neon.tech/neondb?sslmode=require"
-
 fallback_sqlite_url = tmp_db_url if is_serverless else (
     f"sqlite:///{os.path.abspath(existing_local_db).replace('\\', '/')}" if existing_local_db else tmp_db_url
 )
 
 db_url = raw_env_url
-if not db_url or "@db:" in db_url or ("@localhost:5432" in db_url and not os.environ.get("USE_LOCAL_POSTGRES")):
-    db_url = NEON_CLOUD_URL
+if not db_url:
+    db_url = fallback_sqlite_url
 
 if db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql+psycopg2://", 1)
