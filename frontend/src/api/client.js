@@ -74,7 +74,9 @@ export const initApiConfig = () => {
 
 const client = axios.create({
   baseURL: API_BASE_URL,
+  timeout: 12000,
 })
+
 
 client.interceptors.request.use((config) => {
   if (config.url?.startsWith('/api/')) {

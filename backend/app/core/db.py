@@ -1,4 +1,5 @@
 import os
+import shutil
 import tempfile
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
@@ -6,10 +7,17 @@ from sqlalchemy.pool import NullPool, QueuePool
 
 from app.core.config import settings
 
-connect_args = {}
-raw_env_url = os.environ.get("DATABASE_URL", "").strip()
-db_url = raw_env_url or settings.DATABASE_URL
-is_serverless = bool(os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"))
+# Locate bundled SQLite database if available
+cur_file_dir = os.path.dirname(os.path.abspath(__file__))
+backend_dir = os.path.dirname(os.path.dirname(cur_file_dir))
+root_dir = os.path.dirname(backend_dir)
+candidates = [
+    os.path.join(root_dir, "threat_analyser.db"),
+    os.path.join(backend_dir, "threat_analyser.db"),
+    os.path.join(os.getcwd(), "threat_analyser.db"),
+    "threat_analyser.db",
+]
+existing_local_db = next((p for p in candidates if os.path.isfile(p)), None)
 
 tmp_dir = tempfile.gettempdir()
 try:
@@ -19,28 +27,54 @@ except Exception:
 tmp_db_path = os.path.join(tmp_dir, "threat_analyser.db").replace("\\", "/")
 tmp_db_url = f"sqlite:///{tmp_db_path}" if not tmp_db_path.startswith("/") else f"sqlite://{tmp_db_path}"
 
-# In Vercel or serverless, if no valid external Postgres is provided or still points to docker host @db:5432
-if is_serverless:
-    if not raw_env_url or "@db:" in db_url or "@localhost:" in db_url or "sqlite" in db_url:
-        db_url = tmp_db_url
+# Seed tmp database from existing pre-populated file if in serverless
+if existing_local_db and not os.path.exists(tmp_db_path):
+    try:
+        shutil.copyfile(existing_local_db, tmp_db_path)
+    except Exception:
+        pass
+
+is_serverless = bool(os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"))
+raw_env_url = (os.environ.get("DATABASE_URL") or getattr(settings, "DATABASE_URL", "")).strip()
+
+fallback_sqlite_url = tmp_db_url if is_serverless else (
+    f"sqlite:///{os.path.abspath(existing_local_db).replace('\\', '/')}" if existing_local_db else tmp_db_url
+)
+
+db_url = raw_env_url
+if not db_url or "@db:" in db_url or ("@localhost:5432" in db_url and not os.environ.get("USE_LOCAL_POSTGRES")):
+    db_url = fallback_sqlite_url
+
+if db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql+psycopg2://", 1)
+elif db_url.startswith("postgresql://") and not db_url.startswith("postgresql+"):
+    db_url = db_url.replace("postgresql://", "postgresql+psycopg2://", 1)
+
+def create_configured_engine(target_url):
+    if target_url.startswith("sqlite"):
+        return create_engine(target_url, connect_args={"check_same_thread": False}, pool_pre_ping=True)
+    pool_class = NullPool if is_serverless else QueuePool
+    return create_engine(
+        target_url,
+        poolclass=pool_class,
+        pool_pre_ping=True,
+        connect_args={"connect_timeout": 5}
+    )
 
 engine = None
 try:
-    if db_url.startswith("sqlite"):
-        connect_args = {"check_same_thread": False}
-        engine = create_engine(db_url, connect_args=connect_args, pool_pre_ping=True)
-    else:
-        if db_url.startswith("postgres://"):
-            db_url = db_url.replace("postgres://", "postgresql+psycopg2://", 1)
-        pool_class = NullPool if is_serverless else QueuePool
-        engine = create_engine(db_url, poolclass=pool_class, pool_pre_ping=True)
+    engine = create_configured_engine(db_url)
+    if not db_url.startswith("sqlite"):
+        with engine.connect() as conn:
+            pass
 except Exception as err:
-    print(f"[Database Engine Warning] Failed creating engine for {db_url}: {err}. Falling back to SQLite.", flush=True)
-    connect_args = {"check_same_thread": False}
-    engine = create_engine(tmp_db_url, connect_args=connect_args, pool_pre_ping=True)
+    print(f"[Database Engine Warning] Failed connecting to {db_url}: {err}. Falling back to SQLite.", flush=True)
+    db_url = fallback_sqlite_url
+    engine = create_configured_engine(fallback_sqlite_url)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
+
 
 _initialized = False
 

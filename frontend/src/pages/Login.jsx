@@ -23,14 +23,17 @@ export default function Login() {
       const detail = err.response?.data?.detail
       if (detail) {
         setError(detail)
+      } else if (err.code === 'ECONNABORTED' || err.message?.includes('timeout')) {
+        setError('Authentication request timed out. Please check that the backend service is running.')
       } else if (err.message === 'Network Error' || !err.response) {
-        setError('Unable to reach backend API. If you are a new user, please click "Register Organization" below.')
+        setError('Unable to reach backend API. If you are running locally, please ensure the backend is started.')
       } else {
-        setError(`Authentication error: ${err.response?.data?.message || 'Invalid credentials or unregistered account. Please Register below.'}`)
+        setError(`Authentication error: ${err.response?.data?.message || err.message || 'Invalid credentials or unregistered account. Please Register below.'}`)
       }
     } finally {
       setLoading(false)
     }
+
   }
 
   return (

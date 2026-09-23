@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "api/index.py": {
+      "includeFiles": "backend/**,threat_analyser.db"
+    }
+  },
   "rewrites": [
     {
       "source": "/(.*)",
@@ -6,3 +11,4 @@
     }
   ]
 }
+

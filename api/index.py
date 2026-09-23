@@ -12,6 +12,7 @@ backend_dir = os.path.join(root_dir, "backend")
 for candidate in [
     backend_dir,
     os.path.join(current_dir, "backend"),
+    os.path.abspath(os.path.join(current_dir, "..", "backend")),
     root_dir,
 ]:
     if os.path.exists(candidate) and candidate not in sys.path:
@@ -24,13 +25,22 @@ except Exception as e:
     print(f"[Vercel Startup Error]: {err_trace}", flush=True)
     from fastapi import FastAPI
     from fastapi.responses import JSONResponse
+    from fastapi.middleware.cors import CORSMiddleware
 
-    app = FastAPI(title="CyberTrace Error Diagnostic")
+    app = FastAPI(title="CyberTrace Diagnostic")
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
+    @app.api_route("/", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"])
     @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"])
-    async def catch_all_error(path: str):
+    async def catch_all_error(path: str = ""):
         return JSONResponse(
-            status_code=500,
+            status_code=503,
             content={
                 "error": "Backend initialization failed",
                 "detail": str(e),
@@ -41,3 +51,4 @@ except Exception as e:
                 "backend_exists": os.path.exists(backend_dir),
             }
         )
+
