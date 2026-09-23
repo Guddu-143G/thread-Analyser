@@ -39,14 +39,17 @@ def register(payload: RegisterRequest, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(user)
 
-    CryptographicAuditLedger.append_audit_log(
-        db=db,
-        org_id=org.id,
-        actor_user_id=user.id,
-        action="register",
-        target=user.email,
-        meta={"org_name": payload.org_name},
-    )
+    try:
+        CryptographicAuditLedger.append_audit_log(
+            db=db,
+            org_id=org.id,
+            actor_user_id=user.id,
+            action="register",
+            target=user.email,
+            meta={"org_name": payload.org_name},
+        )
+    except Exception as e:
+        print(f"[Register Audit Log Warning] {e}", flush=True)
 
     token = create_access_token({"sub": user.id, "org_id": org.id, "role": user.role.value})
     return TokenResponse(access_token=token)
@@ -70,13 +73,16 @@ def login(payload: LoginRequest, request: Request, db: Session = Depends(get_db)
     if not user or not pwd_valid:
         raise HTTPException(status_code=401, detail="Invalid email or password")
 
-    CryptographicAuditLedger.append_audit_log(
-        db=db,
-        org_id=user.org_id,
-        actor_user_id=user.id,
-        action="login",
-        target=user.email,
-    )
+    try:
+        CryptographicAuditLedger.append_audit_log(
+            db=db,
+            org_id=user.org_id,
+            actor_user_id=user.id,
+            action="login",
+            target=user.email,
+        )
+    except Exception as e:
+        print(f"[Login Audit Log Warning] {e}", flush=True)
 
     token = create_access_token({"sub": user.id, "org_id": user.org_id, "role": user.role.value})
     
@@ -85,8 +91,8 @@ def login(payload: LoginRequest, request: Request, db: Session = Depends(get_db)
         session_record = ActiveUserSession(
             user_id=user.id,
             token_hash=hash_token(token),
-            device_info=request.headers.get("user-agent", "unknown"),
-            ip_address=request.client.host if request.client else "unknown",
+            device_info=request.headers.get("user-agent", "unknown") if (request and hasattr(request, "headers")) else "unknown",
+            ip_address=request.client.host if (request and hasattr(request, "client") and request.client) else "unknown",
             expires_at=datetime.now(timezone.utc) + timedelta(hours=24)
         )
         db.add(session_record)

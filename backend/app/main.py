@@ -1,6 +1,8 @@
 import os
 import asyncio
+import traceback
 from fastapi import FastAPI, Depends, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
@@ -32,6 +34,21 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    trace = traceback.format_exc()
+    print(f"[CyberTrace Unhandled Exception] {request.method} {request.url.path}: {exc}\n{trace}", flush=True)
+    return JSONResponse(
+        status_code=500,
+        content={
+            "detail": f"Internal Server Error: {str(exc)}",
+            "type": type(exc).__name__,
+            "path": request.url.path,
+        }
+    )
+
 
 
 app.include_router(auth.router)
